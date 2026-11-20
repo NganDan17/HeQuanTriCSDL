@@ -1,21 +1,17 @@
-# Nạp dữ liệu và chạy
+# Cách chạy
 
-## 1. Nạp dữ liệu
+**Máy cần có:** Visual Studio với **ASP.NET and web development**, .NET Framework 4.7.2 Developer Pack và SQL Server.
 
-Mở thư mục có `KhoiTao.ps1`, gõ `powershell` vào thanh địa chỉ rồi nhấn Enter. Dán lệnh:
+1. Trong SSMS: chuột phải tên máy chủ → **Properties → Security → SQL Server and Windows Authentication mode → OK**. Chuột phải máy chủ → **Restart**. Chỉ cần làm một lần; máy chủ dùng chung cần người quản lý thực hiện.
+2. Tải và giải nén dự án vào đường dẫn ngắn, ví dụ `D:\Health`.
+3. Mở thư mục có `KhoiTao.ps1`, gõ `powershell` vào thanh địa chỉ, nhấn Enter rồi chạy:
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\KhoiTao.ps1 -SqlServer '.\SQLEXPRESS'
-```
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\KhoiTao.ps1 -SqlServer '.\SQLEXPRESS'
+   ```
 
-Thay `.\SQLEXPRESS` nếu SQL Server của bạn có tên khác. Nếu dữ liệu đã có, thêm `-SuDungDuLieuHienCo` vào cuối lệnh.
+   Đổi `.\SQLEXPRESS` theo tên SQL Server của máy. Nếu database của dự án đã có, thêm `-SuDungDuLieuHienCo` vào cuối lệnh.
+4. Mở `Nhom05_Health_Fitness.sln` bằng Visual Studio. Nếu thiếu gói, chuột phải Solution → **Restore NuGet Packages**.
+5. Nhấn **F5**, mở `/Account/Login` trên website vừa chạy. Đăng nhập mẫu: **`phamgiabao` / `123456`**.
 
-## 2. Chạy website
-
-1. Mở `Nhom05_Health_Fitness.sln` bằng **Visual Studio**.
-2. Nhấn **F5** và mở `/Account/Login` trên website vừa chạy.
-3. Đăng nhập mẫu: **`phamgiabao` / `123456`**.
-
-Lần sau chỉ cần mở `.sln` và nhấn **F5**, không nạp lại dữ liệu.
-
-Máy chưa cài đủ phần mềm hoặc chưa bật SQL Mixed Mode: xem [hướng dẫn cài đặt](HUONG_DAN_CAI_DAT.md).
+**Lần sau:** chỉ mở `.sln` rồi F5. Giữ tệp `Database.Local.config` đã tạo. Dữ liệu đi kèm là dữ liệu mẫu; không tự nạp đè database đang dùng.
