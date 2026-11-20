@@ -1,0 +1,146 @@
+﻿@model Nhom05_Health_Fitness.Models.MucTieu
+
+@{
+    ViewBag.Title = "Mục tiêu tập luyện";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+    decimal currentWeight = ViewBag.CurrentWeight ?? 0;
+    decimal targetWeight = Model != null ? (Model.CanNangMucTieu_kg ?? 0) : 0;
+
+    decimal diff = 0;
+    string statusMessage = "Hãy thiết lập mục tiêu đầu tiên!";
+    string progressColor = "text-muted";
+
+    if (Model != null && currentWeight > 0)
+    {
+        diff = currentWeight - targetWeight;
+        if (diff > 0)
+        {
+            statusMessage = $"Bạn cần giảm {diff} kg nữa";
+            progressColor = "text-warning";
+        }
+        else if (diff < 0)
+        {
+            statusMessage = $"Bạn cần tăng {Math.Abs(diff)} kg nữa";
+            progressColor = "text-info";
+        }
+        else
+        {
+            statusMessage = "Chúc mừng! Bạn đã đạt mục tiêu!";
+            progressColor = "text-success";
+        }
+    }
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">
+                    <i class="fas fa-bullseye me-2"></i>Mục tiêu của bạn
+                </h2>
+                <p class="text-muted">"Đặt mục tiêu rõ ràng là bước đầu tiên để biến cái vô hình thành hữu hình"</p>
+                <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+            </div>
+
+            <div class="card shadow border-0 rounded-4 mb-5 overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+                        <div class="col-md-6 bg-light p-4 text-center border-end border-white">
+                            <p class="text-uppercase text-muted fw-bold small mb-2">Hiện tại</p>
+                            <h2 class="fw-bold text-dark mb-0">@currentWeight <small class="fs-6">kg</small></h2>
+                        </div>
+                        <div class="col-md-6 bg-brand-teal text-white p-4 text-center">
+                            <p class="text-uppercase text-white-50 fw-bold small mb-2">Đích đến</p>
+                            <h2 class="fw-bold text-brand-neon mb-0">
+                                @(targetWeight > 0 ? targetWeight.ToString() : "--") <small class="fs-6 text-white">kg</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="p-3 text-center bg-white border-top">
+                        <h5 class="fw-bold mb-0 @progressColor">
+                            <i class="fas fa-flag-checkered me-2"></i>@statusMessage
+                        </h5>
+                        @if (Model != null && Model.HanHoanThanh.HasValue)
+                        {
+                            <small class="text-muted">Hạn hoàn thành: @Model.HanHoanThanh.Value.ToString("dd/MM/yyyy")</small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-white py-3 border-bottom-0">
+                    <h5 class="fw-bold text-brand-teal mb-0"><i class="fas fa-edit me-2"></i>Thiết lập mục tiêu mới</h5>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>@TempData["Success"]</div>
+                    }
+
+                    <form action="@Url.Action("LuuMucTieu", "User")" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold text-muted">Bạn muốn gì?</label>
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <input type="radio" class="btn-check" name="loaiMucTieu" id="optGiamCan" value="Giảm cân"
+                                               @(Model?.LoaiMucTieu == "Giảm cân" || Model == null ? "checked" : "")>
+                                        <label class="btn btn-outline-secondary w-100 h-100 py-3 fw-bold" for="optGiamCan">
+                                            <i class="fas fa-arrow-down d-block mb-1"></i> Giảm cân
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="radio" class="btn-check" name="loaiMucTieu" id="optTangCan" value="Tăng cân"
+                                               @(Model?.LoaiMucTieu == "Tăng cân" ? "checked" : "")>
+                                        <label class="btn btn-outline-secondary w-100 h-100 py-3 fw-bold" for="optTangCan">
+                                            <i class="fas fa-arrow-up d-block mb-1"></i> Tăng cân
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="radio" class="btn-check" name="loaiMucTieu" id="optGiuDang" value="Giữ dáng"
+                                               @(Model?.LoaiMucTieu == "Giữ dáng" ? "checked" : "")>
+                                        <label class="btn btn-outline-secondary w-100 h-100 py-3 fw-bold" for="optGiuDang">
+                                            <i class="fas fa-heart d-block mb-1"></i> Giữ dáng
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted mt-3">Cân nặng mong muốn (kg)</label>
+                                <input type="number" step="0.1" name="canNangMucTieu" class="form-control form-control-lg"
+                                       value="@(Model?.CanNangMucTieu_kg)" required placeholder="Ví dụ: 65">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted mt-3">Hạn hoàn thành</label>
+                                <input type="date" name="hanHoanThanh" class="form-control form-control-lg"
+                                       value="@(Model?.HanHoanThanh?.ToString("yyyy-MM-dd"))" required>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-neon w-100 fw-bold text-dark py-3 shadow-sm">
+                                    LƯU MỤC TIÊU
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-check:checked + .btn-outline-secondary {
+        background-color: var(--brand-teal);
+        color: var(--brand-neon);
+        border-color: var(--brand-teal);
+    }
+</style>

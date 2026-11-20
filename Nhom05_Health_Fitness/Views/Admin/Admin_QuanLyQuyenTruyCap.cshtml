@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.BangPhanQuyenViewModel>
+
+@{
+    ViewBag.Title = "Phân quyền truy cập bảng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <div class="dashboard-header mb-4">
+        <h2>🛡️ Quản Lý Truy Cập Dữ Liệu</h2>
+        <p class="text-muted">Cấp hoặc thu hồi quyền xem (SELECT) các bảng dữ liệu cho từng vai trò.</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th class="py-3 ps-4">TÊN BẢNG DỮ LIỆU</th>
+                            <th class="py-3 text-center">QUYỀN HỘI VIÊN (USER)</th>
+                            <th class="py-3 text-center">QUYỀN HLV (COACH)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary font-monospace">@item.TenBang</td>
+
+                                <td class="text-center">
+                                    <div class="form-check form-switch d-inline-block">
+                                        <input class="form-check-input" type="checkbox"
+                                               role="switch"
+                                               onchange="updatePermission('@item.TenBang', 'User', this.checked)"
+                                               @(item.HoiVienDuocXem ? "checked" : "")>
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="form-check form-switch d-inline-block">
+                                        <input class="form-check-input" type="checkbox"
+                                               role="switch"
+                                               onchange="updatePermission('@item.TenBang', 'HLV', this.checked)"
+                                               @(item.HlvDuocXem ? "checked" : "")>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updatePermission(table, role, isGranted) {
+        // Gọi về Controller để chạy lệnh SQL
+        $.ajax({
+            url: '@Url.Action("CapNhatQuyenBang", "Admin")',
+            type: 'POST',
+            data: {
+                tenBang: table,
+                role: role,
+                choPhep: isGranted
+            },
+            success: function (res) {
+                if (res.success) {
+                    // Hiệu ứng thông báo nhỏ (Toast) hoặc log ra console
+                    console.log("Đã cập nhật: " + table + " -> " + role + " = " + isGranted);
+                } else {
+                    alert(res.msg);
+                    // Nếu lỗi thì trả lại trạng thái cũ của nút gạt
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert("Lỗi kết nối server!");
+            }
+        });
+    }
+</script>
+
+<style>
+    .form-check-input {
+        cursor: pointer;
+        width: 3em;
+        height: 1.5em;
+    }
+
+        .form-check-input:checked {
+            background-color: #198754; /* Màu xanh lá khi bật */
+            border-color: #198754;
+        }
+</style>

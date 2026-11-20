@@ -1,0 +1,187 @@
+﻿@model Nhom05_Health_Fitness.Models.StudentDetailViewModel
+
+@{
+    ViewBag.Title = "Chi tiết học viên: " + Model.HoTen;
+    Layout = "~/Views/Shared/_LayoutHLV.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="~/Content/styleHLV.css" rel="stylesheet" />
+
+<div class="student-detail-container">
+
+    <div class="student-info-header">
+        <div>
+            <h2>Hồ sơ: @Model.HoTen</h2>
+            <p>Chi tiết chỉ số cơ thể, mục tiêu và lịch sử tiến trình tập luyện.</p>
+        </div>
+        <a href="@Url.Action("StudentInfo", "HLV")" class="btn-view" style="min-width: 120px;">
+            <i class="fas fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <div class="detail-grid">
+
+        <div class="left-column">
+
+            <div class="content-card-dark" style="margin-bottom: 25px;">
+                <h3>
+                    <i class="fas fa-user-circle" style="color: var(--accent-red); margin-right: 10px;"></i>
+                    Thông tin cơ bản
+                </h3>
+
+                <div class="info-group">
+                    <span class="info-label">Mã học viên</span>
+                    <span class="info-value">@Model.NguoiDungID</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Giới tính</span>
+                    <span class="info-value">
+                        @if (Model.Gender == "Nam")
+                        {<span style="color:#64b5f6"><i class="fas fa-mars"></i> Nam</span> }
+                        else if (Model.Gender == "Nữ")
+                        { <span style="color:#f48fb1"><i class="fas fa-venus"></i> Nữ</span> }
+                        else
+                        { <span>@Model.Gender</span>}
+                    </span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Chiều cao</span>
+                    <span class="info-value">@(Model.Height.HasValue ? Model.Height + " cm" : "--")</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Cân nặng hiện tại</span>
+                    <span class="info-value">@(Model.Weight.HasValue ? Model.Weight + " kg" : "--")</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Chỉ số BMI</span>
+                    <span class="info-value" style="color: var(--accent-red); font-size: 16px;">
+                        @(Model.BMI.HasValue ? Model.BMI.Value.ToString("0.0") : "--")
+                    </span>
+                </div>
+            </div>
+
+            <div class="content-card-dark">
+                <h3>
+                    <i class="fas fa-bullseye" style="color: var(--accent-red); margin-right: 10px;"></i>
+                    Mục tiêu
+                </h3>
+
+                <div class="info-group">
+                    <span class="info-label">Loại mục tiêu</span>
+                    <span class="goal-badge">@Model.Goal</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Cân nặng mong muốn</span>
+                    <span class="info-value">@Model.GoalTarget</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Thời hạn</span>
+                    <span class="info-value" style="color: var(--accent-red-hover);">@Model.GoalTimeline</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="content-card-dark" style="height: 100%; min-height: 450px; display: flex; flex-direction: column;">
+                <h3>
+                    <i class="fas fa-chart-line" style="color: var(--accent-red); margin-right: 10px;"></i>
+                    Tiến trình cân nặng
+                </h3>
+
+                <div style="flex-grow: 1; position: relative; width: 100%; min-height: 300px;">
+                    @if (Model.ProgressChartData != null && Model.ProgressChartData.Any())
+                    {
+                        <canvas id="detailProgressChart"></canvas>
+                    }
+                    else
+                    {
+                        <div class="empty-state" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+                            <i class="fas fa-chart-area"></i>
+                            <p>Chưa có dữ liệu ghi nhận cân nặng để vẽ biểu đồ.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chỉ chạy script vẽ biểu đồ nếu có dữ liệu
+            @if (Model.ProgressChartData != null && Model.ProgressChartData.Any())
+            {
+                <text>
+                const ctx = document.getElementById('detailProgressChart').getContext('2d');
+
+                // Tạo màu Gradient đỏ đậm dần xuống trong suốt (Theme Dark Mode)
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(231, 76, 60, 0.5)'); // Đỏ đậm
+                gradient.addColorStop(1, 'rgba(33, 10, 18, 0.0)');   // Trong suốt
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: @Html.Raw(Json.Encode(Model.ProgressChartLabels)), // Ngày tháng
+                        datasets: [{
+                            label: 'Cân nặng (kg)',
+                            data: @Html.Raw(Json.Encode(Model.ProgressChartData)), // Số liệu cân nặng
+                            backgroundColor: gradient,
+                            borderColor: '#e74c3c', // Viền đỏ
+                            borderWidth: 2,
+                            pointBackgroundColor: '#210a12', // Nền điểm trùng màu background web
+                            pointBorderColor: '#e74c3c',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            fill: true, // Tô màu vùng dưới
+                            tension: 0.3 // Làm mềm đường cong
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }, // Ẩn chú thích (Legend)
+                            tooltip: {
+                                backgroundColor: '#33151f', // Tooltip nền tối
+                                titleColor: '#fff',
+                                bodyColor: '#ccc',
+                                borderColor: '#e74c3c',
+                                borderWidth: 1,
+                                displayColors: false,
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: '#444', borderDash: [5, 5] }, // Lưới ngang nét đứt mờ
+                                ticks: {
+                                    color: '#ccc',
+                                    font: { family: 'Poppins' },
+                                    callback: function(value) { return value + ' kg'; }
+                                },
+                                border: { display: false }
+                            },
+                            x: {
+                                grid: { display: false }, // Bỏ lưới dọc
+                                ticks: {
+                                    color: '#ccc',
+                                    font: { family: 'Poppins' }
+                                }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                    }
+                });
+                </text>
+            }
+        });
+    </script>
+}

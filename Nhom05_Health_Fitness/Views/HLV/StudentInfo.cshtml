@@ -1,0 +1,103 @@
+﻿@model Nhom05_Health_Fitness.Models.StudentInfoPageViewModel
+
+@{
+    ViewBag.Title = "Quản Lý Học Viên";
+    Layout = "~/Views/Shared/_LayoutHLV.cshtml";
+}
+
+<link href="~/Content/styleHLV.css" rel="stylesheet" />
+
+<div class="student-info-container">
+
+    <div class="student-info-header">
+        <div>
+            <h2>Danh Sách Học Viên</h2>
+            <p>Quản lý hồ sơ và theo dõi tiến độ tập luyện</p>
+        </div>
+
+        @using (Html.BeginForm("StudentInfo", "HLV", FormMethod.Get, new { @class = "student-search-bar" }))
+        {
+            <i class="fas fa-search"></i>
+            <input type="text"
+                   name="searchString"
+                   value="@ViewBag.CurrentFilter"
+                   autocomplete="off"
+                   placeholder="Tìm tên học viên..." />
+            <button type="submit" style="display:none;"></button>
+        }
+    </div>
+
+    <div class="table-responsive">
+        <table class="student-table">
+            <thead>
+                <tr>
+                    <th>Họ Tên</th>
+                    <th>Giới Tính</th>
+                    <th>Cân Nặng</th>
+                    <th>Chiều Cao</th>
+                    <th style="text-align: center;">Mục Tiêu</th>
+                    <th>Tiến Độ</th>
+                    <th>Cập Nhật Cuối</th>
+                    <th style="text-align: center;">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Students != null && Model.Students.Any())
+                {
+                    foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td><strong>@student.Name</strong></td>
+                            <td>
+                                @if (student.Gender == "Nam")
+                                {<span style="color:#64b5f6"><i class="fas fa-mars"></i> Nam</span> }
+                                else if (student.Gender == "Nữ")
+                                { <span style="color:#f48fb1"><i class="fas fa-venus"></i> Nữ</span> }
+                                else
+                                { <span>@student.Gender</span>}
+                            </td>
+                            <td>@(student.Weight.HasValue ? student.Weight.Value.ToString("0.##") + " kg" : "---")</td>
+                            <td>@(student.Height.HasValue ? student.Height.Value.ToString("0.##") + " cm" : "---")</td>
+
+                            <td style="text-align: center;">
+                                <span class="goal-badge">
+                                    @student.Goal
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: @student.Progress%;"></div>
+                                    </div>
+                                    <span class="progress-text">@student.Progress%</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                @(student.LastUpdate.HasValue ? student.LastUpdate.Value.ToString("dd/MM/yyyy") : "Chưa có")
+                            </td>
+
+                            <td style="text-align: center;">
+                                <a href="@Url.Action("ViewStudentDetail", "HLV", new { id = student.NguoiDungID.Trim() })" class="btn-view">
+                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-search-minus"></i>
+                                <p>Không tìm thấy học viên nào.</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+﻿@model Nhom05_Health_Fitness.Models.UserProfileViewModel
+
+@{
+    ViewBag.Title = "Chi tiết Hội viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var stats = ViewBag.LatestStats as Nhom05_Health_Fitness.Models.TienTrinh;
+   
+    // Sửa dòng này: Ép kiểu về List<DangKyGoiTap>
+    var packages = ViewBag.ActivePackages as List<Nhom05_Health_Fitness.Models.DangKyGoiTap>;
+}
+
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>👤 Hồ Sơ Hội Viên: @(Model.HoTen ?? Model.TenDangNhap)</h2>
+        <p>Xem thông tin chi tiết và lịch sử dịch vụ.</p>
+    </div>
+    <a href="@Url.Action("Admin_DanhSachHoiVien", "Admin")" class="btn-refresh" style="background-color: var(--text-secondary); color: var(--bg-dark-primary); text-decoration: none;">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-top: 20px;">
+
+    @* --- CỘT TRÁI: THÔNG TIN --- *@
+    <div class="detail-card" style="margin: 0; width: auto;">
+        <div class="detail-header" style="border-bottom: none; padding-bottom: 0;">
+            <div class="detail-avatar" style="background-color: var(--bg-dark-secondary); color: var(--accent-gold); width: 100px; height: 100px; font-size: 3rem;">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 style="margin: 15px 0 5px 0; color: var(--text-primary);">@Model.TenDangNhap</h2>
+            <span style="background-color: rgba(80, 205, 137, 0.1); color: var(--accent-green); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
+                @ViewBag.Role
+            </span>
+            <p style="color: var(--text-secondary); margin-top: 10px;">ID: @ViewBag.UserID</p>
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid #2d3748; padding-top: 20px;">
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-envelope" style="width: 20px;"></i> Email</span>
+                <span class="detail-value" style="font-size: 0.9rem;">@Model.Email</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-venus-mars" style="width: 20px;"></i> Giới tính</span>
+                <span class="detail-value">@(Model.GioiTinh ?? "N/A")</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fas fa-birthday-cake" style="width: 20px;"></i> Ngày sinh</span>
+                <span class="detail-value">@(Model.NgaySinh.HasValue ? Model.NgaySinh.Value.ToString("dd/MM/yyyy") : "N/A")</span>
+            </div>
+        </div>
+
+        @* Chỉ còn nút Sửa thông tin *@
+       
+        <div style="margin-top: 30px;">
+            @* SỬ DỤNG ViewBag.UserID ĐỂ TRÁNH LỖI NULL *@
+            <a href="@Url.Action("Admin_SuaUser", "Admin", new { id = (ViewBag.UserID as string ?? "").Trim() })"
+               class="btn-refresh"
+               style="width: auto; background-color: var(--bg-dark-tertiary); color: white; border: 1px solid #2d3748; display: block; text-align: center; text-decoration: none;">
+                <i class="fas fa-edit"></i> Chỉnh sửa hồ sơ
+            </a>
+        </div>
+    </div>
+
+    @* --- CỘT PHẢI: CHỈ SỐ & GÓI TẬP (Giữ nguyên như cũ) --- *@
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+        @* (Copy phần Stats Grid và Table Gói tập ở các câu trả lời trước vào đây) *@
+        @* ... Phần hiển thị BMI, Cân nặng, Chiều cao ... *@
+        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div class="stat-card" style="padding: 20px;">
+                <div class="stat-card-header">
+                    <span>CÂN NẶNG</span>
+                    <div class="stat-icon-wrapper" style="background-color: #3B3B5B; color: #8B8BDE;"><i class="fas fa-weight"></i></div>
+                </div>
+                <div class="stat-value">@(stats != null ? stats.CanNang_kg.ToString() : Model.CanNang?.ToString() ?? "0") <small style="font-size: 14px; color: var(--text-secondary);">kg</small></div>
+            </div>
+            <div class="stat-card" style="padding: 20px;">
+                <div class="stat-card-header">
+                    <span>CHIỀU CAO</span>
+                    <div class="stat-icon-wrapper" style="background-color: #35494A; color: #50CD89;"><i class="fas fa-ruler-vertical"></i></div>
+                </div>
+                <div class="stat-value">@(Model.ChieuCao?.ToString() ?? "0") <small style="font-size: 14px; color: var(--text-secondary);">cm</small></div>
+            </div>
+            <div class="stat-card" style="padding: 20px;">
+                <div class="stat-card-header">
+                    <span>BMI</span>
+                    <div class="stat-icon-wrapper" style="background-color: #4A4442; color: #F8B04F;"><i class="fas fa-calculator"></i></div>
+                </div>
+                <div class="stat-value">@(stats != null ? stats.BMI.ToString() : "N/A")</div>
+                <div class="stat-change @(stats != null && stats.BMI < 25m ? "increase" : "pending")">
+                    @(stats != null && stats.BMI < 18.5m ? "Thiếu cân" : stats != null && stats.BMI > 25m ? "Thừa cân" : "Bình thường")
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-card" style="margin: 0; width: auto; max-width: none;">
+            <h3 style="color: var(--text-primary); margin-top: 0; border-bottom: 1px solid #2d3748; padding-bottom: 15px;">📦 Gói Tập Đang Đăng Ký</h3>
+            @if (packages != null && packages.Any())
+            {
+                <table class="table-custom" style="margin-top: 0;">
+                    <thead>
+                        <tr>
+                            <th>Tên Gói</th>
+                            <th>Ngày Đăng Ký</th>
+                            <th>Ngày Hết Hạn</th>
+                            <th>Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in packages)
+                        {
+                            <tr>
+                                @* Gọi qua bảng liên kết: item.GoiTap.TenGoi *@
+                                <td style="font-weight: bold; color: var(--accent-gold);">
+                                    @(item.GoiTap != null ? item.GoiTap.TenGoi : "Lỗi tên gói")
+                                </td>
+
+                                <td>@(item.NgayDangKy.HasValue ? item.NgayDangKy.Value.ToString("dd/MM/yyyy") : "")</td>
+                                <td>@(item.NgayHetHan.HasValue ? item.NgayHetHan.Value.ToString("dd/MM/yyyy") : "")</td>
+
+                                <td>
+                                    <span style="color: var(--accent-green); font-weight: bold;">Đang hoạt động</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p style="text-align:center; color: var(--text-secondary); padding: 20px;">Chưa có gói tập nào.</p>
+            }
+        </div>
+    </div>
+</div>

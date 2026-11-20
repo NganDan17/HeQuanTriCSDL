@@ -1,0 +1,88 @@
+﻿@model List<Nhom05_Health_Fitness.Models.usp_LayBaoCaoDoanhThuNamResult>
+@{
+    ViewBag.Title = "Báo cáo Doanh Thu";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    // --- TÍNH TOÁN TỔNG HỢP ---
+    // (Đã sửa lỗi CS0266: Cần dùng ?? 0M / ?? 0 cho thuộc tính nullable)
+    decimal tongDoanhThuNam = Model?.Sum(item => item.TongDoanhThu ?? 0M) ?? 0M;
+    int tongGiaoDichNam = Model?.Sum(item => item.SoLuotGiaoDich ?? 0) ?? 0;
+
+    // Tạo danh sách 12 tháng cố định để lặp
+    var allMonths = Enumerable.Range(1, 12);
+}
+@using Nhom05_Health_Fitness.Models;
+
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>Báo cáo Doanh thu Năm @ViewBag.ReportYear</h2>
+        <p>Chi tiết doanh thu của phòng tập theo từng tháng.</p>
+    </div>
+    <a href="@Url.Action("Admin_TrangChu", "Admin")" class="btn-refresh" style="background-color: var(--accent-grey); color: white; text-decoration: none;">
+        <i class="fas fa-arrow-left"></i> Trở về Dashboard
+    </a>
+</div>
+
+<div class="report-container" style="margin-top: 30px; background-color: var(--bg-dark-tertiary); padding: 20px; border-radius: 12px;">
+
+    <h3 style="color: var(--text-primary);">Tổng Quan Kết Quả Năm</h3>
+
+    @* --- KHU VỰC HIỂN THỊ TỔNG HỢP --- *@
+    <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+
+        <div class="stat-card" style="padding: 20px;">
+            <div class="stat-card-header">
+                <span>TỔNG DOANH THU ĐÃ GHI NHẬN</span>
+                <div class="stat-icon-wrapper revenue" style="background-color: #35494A; color: #50CD89;"><i class="fas fa-dollar-sign"></i></div>
+            </div>
+            <div class="stat-value" style="font-size: 32px; color: var(--accent-gold);">@tongDoanhThuNam.ToString("N0") VNĐ</div>
+        </div>
+
+        <div class="stat-card" style="padding: 20px;">
+            <div class="stat-card-header">
+                <span>TỔNG SỐ LƯỢT GIAO DỊCH</span>
+                <div class="stat-icon-wrapper members" style="background-color: #3B3B5B; color: #8B8BDE;"><i class="fas fa-receipt"></i></div>
+            </div>
+            <div class="stat-value" style="font-size: 32px;">@tongGiaoDichNam</div>
+        </div>
+
+    </div>
+
+    <h3 style="color: var(--text-primary);">Doanh thu chi tiết theo tháng</h3>
+
+    <table class="table" style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: var(--bg-dark-primary);">
+            <tr>
+                <th style="padding: 15px; text-align: left; color: var(--text-secondary);">Tháng</th>
+                <th style="padding: 15px; text-align: right; color: var(--text-secondary);">Tổng Doanh Thu</th>
+                <th style="padding: 15px; text-align: right; color: var(--text-secondary);">Số giao dịch</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* Lặp qua 12 tháng cố định và dùng LINQ để tìm dữ liệu tương ứng *@
+            @foreach (var month in allMonths)
+            {
+                // Tìm kiếm dữ liệu cho tháng hiện tại trong Model
+                var item = Model?.FirstOrDefault(m => m.Thang == month);
+
+                // Trích xuất giá trị an toàn (Sử dụng 0 nếu item là null)
+                decimal monthlyRevenue = item?.TongDoanhThu ?? 0M;
+                int monthlyTransactions = item?.SoLuotGiaoDich ?? 0;
+
+                <tr style="border-bottom: 1px solid #2d3748;">
+                    <td style="padding: 15px;">Tháng @month</td>
+                    <td style="padding: 15px; text-align: right; font-weight: bold; color: @(monthlyRevenue > 0 ? "var(--accent-green)" : "var(--text-primary)");">
+                        @monthlyRevenue.ToString("N0") VNĐ
+                    </td>
+                    <td style="padding: 15px; text-align: right;">@monthlyTransactions</td>
+                </tr>
+            }
+            @if (tongDoanhThuNam == 0)
+            {
+                <tr>
+                    <td colspan="3" style="padding: 15px; text-align: center; color: var(--text-secondary);">Chưa có dữ liệu giao dịch nào được ghi nhận trong năm.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,115 @@
+﻿@model List<Nhom05_Health_Fitness.Models.usp_DanhSachPhanQuyenResult>
+
+@{
+    ViewBag.Title = "Danh sách Huấn Luyện Viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>🏋️ Danh Sách Huấn Luyện Viên</h2>
+        <p>Quản lý đội ngũ chuyên gia và hồ sơ huấn luyện.</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <button class="btn-refresh" onclick="location.reload()">
+            <i class="fas fa-redo"></i> Tải lại
+        </button>
+        @* Nút thêm mới (Nếu cần chức năng thêm HLV riêng) *@
+        @* <a href="@Url.Action("ThemHLV", "Admin")" class="btn-refresh" style="background-color: var(--accent-green); color: white; text-decoration: none;">
+                <i class="fas fa-plus"></i> Thêm HLV
+            </a>
+        *@
+    </div>
+</div>
+
+<div class="table-container" style="margin-top: 20px;">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th style="width: 35%;">THÔNG TIN HLV</th>
+                <th style="width: 20%;">TÊN ĐĂNG NHẬP</th>
+                <th style="width: 15%;">VAI TRÒ</th>
+                <th style="width: 15%;">NGÀY CẬP NHẬT</th>
+                <th style="width: 15%; text-align: right;">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @* Cột 1: Avatar + Tên + Email *@
+                        <td>
+                            <div class="user-info-cell">
+                                @* Icon HLV dùng màu vàng để phân biệt với User *@
+                                <div style="width: 40px; height: 40px; background-color: var(--bg-dark-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-size: 20px;">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+
+                                <div class="user-details">
+                                    <span class="user-name" style="color: var(--text-primary); font-weight: 600;">
+                                        @(string.IsNullOrEmpty(item.HoTen) ? "Chưa cập nhật tên" : item.HoTen)
+                                    </span>
+                                    <span class="user-username" style="color: var(--text-secondary); font-size: 12px;">
+                                        @item.Email
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        @* Cột 2: Username (Style màu vàng) *@
+                        <td>
+                            <span style="font-family: monospace; color: var(--accent-yellow); background: rgba(255, 199, 0, 0.1); padding: 4px 8px; border-radius: 4px;">
+                                @item.TenDangNhap
+                            </span>
+                        </td>
+
+                        @* Cột 3: Vai trò *@
+                        <td>
+                            <span style="color: var(--text-secondary); font-weight: 500;">
+                                <i class="fas fa-certificate" style="margin-right: 5px; color: var(--accent-gold);"></i> @item.QuyenHienTai
+                            </span>
+                        </td>
+
+                        @* Cột 4: Ngày cập nhật *@
+                        <td style="color: var(--text-secondary);">
+                            @(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToString("dd/MM/yyyy") : "N/A")
+                        </td>
+
+                        @* Cột 5: Thao tác *@
+                        <td>
+                            <div class="action-buttons">
+                                @* Nút Xem Chi Tiết (Trỏ về Admin_ChiTietUser - Đã sửa lỗi Trim) *@
+                                <a href="@Url.Action("Admin_ChiTietUser", "Admin", new { id = item.NguoiDungID.Trim() })"
+                                   class="btn-action"
+                                   title="Xem hồ sơ chi tiết"
+                                   style="background-color: #3B3B5B; color: #fff;">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                @* Nút Sửa (Trỏ về Admin_SuaUser - Đã sửa lỗi Trim) *@
+                                <a href="@Url.Action("Admin_SuaUser", "Admin", new { id = item.NguoiDungID.Trim() })"
+                                   class="btn-action"
+                                   title="Sửa thông tin"
+                                   style="background-color: var(--bg-dark-tertiary);">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                        <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i>
+                        Không tìm thấy Huấn Luyện Viên nào.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

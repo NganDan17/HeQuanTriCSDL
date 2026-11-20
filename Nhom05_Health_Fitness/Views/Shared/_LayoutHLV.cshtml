@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GymMaster Pro - @ViewBag.Title</title> @* Thêm ViewBag.Title để link active hoạt động *@
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="~/Content/styleHLV.css" rel="stylesheet" /> @* Đổi tên file này thành styleHLV.css *@
+
+    <style>
+        .logout-icon {
+            color: var(--icon-color);
+            margin-left: 15px;
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .logout-icon:hover {
+                color: var(--accent-red);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <aside class="sidebar">
+            <nav class="main-nav">
+                <ul>
+                    @* Thêm ViewBag.Title = "Dashboard" trong Action HLVTrangChu *@
+                    <li class="@(ViewBag.Title == "Dashboard" ? "active" : "")">
+                        <a href="@Url.Action("HLVTrangChu", "HLV")"><i class="fas fa-th-large"></i> Dashboard</a>
+                    </li>
+                    @* Thêm ViewBag.Title = "HocVien" trong Action StudentInfo *@
+                    <li class="@(ViewBag.Title == "HocVien" ? "active" : "")">
+                        <a href="@Url.Action("StudentInfo", "HLV")"><i class="fas fa-user-friends"></i> Student Info</a>
+                    </li>
+
+                    <li><a href="@Url.Action("ActivityLogs","HLV")"><i class="fas fa-chart-line"></i> Activity Logs</a></li>
+                    <li><a href="@Url.Action("Schedule","HLV")"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
+                    <li><a href="@Url.Action("Notifications","HLV")"><i class="fas fa-bell"></i> Notifications</a></li>
+
+                    <li class="@(ViewBag.Title == "Settings" ? "active" : "")">
+                        <a href="@Url.Action("HLVSettings", "HLV")"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="@Url.Action("Logout", "Account")">
+                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="top-bar">
+                @using (Html.BeginForm("StudentInfo", "HLV", FormMethod.Get, new { @class = "search-box" }))
+                {
+                    <i class="fas fa-search"></i>
+                    <input type="text"
+                           name="searchString"
+                           value="@ViewBag.CurrentFilter"
+                           placeholder="Search by name or ID..." />
+
+                    <button type="submit" style="display:none;"></button>
+                }
+
+                @* (Phần nav top-nav này có thể xóa nếu không dùng) *@
+                <nav class="top-nav">
+                    <ul>
+                        <li>Dashboard</li>
+                        <li>Schedule</li>
+                        <li>Students</li>
+                    </ul>
+                </nav>
+
+                <div class="user-actions">
+
+                    @* === SỬA LỖI 2: ĐỌC SESSION THEO ĐÚNG CONTROLLER === *@
+                    @if (Session["NguoiDung"] == null || Session["HoSo"] == null)
+                    {
+                        <a href="@Url.Action("Login", "Account")" class="user-profile" style="text-decoration:none;" title="Đăng nhập HLV">
+                            <div class="user-avatar">?</div>
+                            <div class="user-details">
+                                <span class="role" style="color: white;">Khách</span>
+                                <span class="name">Đăng nhập</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        // Lấy tên từ HoSo, không phải HLV
+                        var hoSo = Session["HoSo"] as Nhom05_Health_Fitness.Models.HoSo;
+                        string tenHLV = (hoSo != null) ? hoSo.HoTen : "Coach";
+                        string avatarChar = (!string.IsNullOrEmpty(tenHLV)) ? tenHLV.Substring(0, 1).ToUpper() : "H";
+
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                @avatarChar
+                            </div>
+                            <div class="user-details">
+                                <span class="role">Coach</span>
+                                <span class="name">@tenHLV</span>
+                            </div>
+
+                            <a href="@Url.Action("HLVDangXuat", "HLV")" class="logout-icon" title="Đăng xuất">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+
+            </header>
+
+            @RenderBody()
+
+        </main>
+    </div>
+
+    <div class="help-button">?</div>
+
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.BaiTap>
+
+@{
+    ViewBag.Title = "Thư viện bài tập";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">
+            <i class="fas fa-dumbbell me-2"></i>Thư viện bài tập
+        </h2>
+        <p class="text-muted">Tra cứu kỹ thuật và thông tin các bài tập</p>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5 bg-light rounded-4">
+        <div class="card-body p-4">
+            <form action="@Url.Action("ThuVienBaiTap", "User")" method="get" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="searchString" class="form-control"
+                           placeholder="Nhập tên bài (VD: Squat, Plank...)"
+                           value="@ViewBag.CurrentFilter">
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownList("loaiBaiTap", (SelectList)ViewBag.LoaiBaiTap, "--- Tất cả loại ---", new { @class = "form-select" })
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-neon w-100 fw-bold text-dark">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                // Logic chọn icon tự động
+                string icon = "fa-dumbbell";
+                string color = "text-primary";
+                string bg = "bg-primary";
+
+                if (item.LoaiBaiTap.Contains("Cardio") || item.LoaiBaiTap.Contains("Thể lực"))
+                {
+                    icon = "fa-running"; color = "text-danger"; bg = "bg-danger";
+                }
+                else if (item.LoaiBaiTap.Contains("Yoga"))
+                {
+                    icon = "fa-spa"; color = "text-success"; bg = "bg-success";
+                }
+
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm hover-up text-center overflow-hidden">
+                        <div class="card-header border-0 py-4 @bg bg-opacity-10">
+                            <i class="fas @icon fa-4x @color opacity-75"></i>
+                        </div>
+
+                        <div class="card-body">
+                            <span class="badge bg-light text-dark border mb-2">@item.LoaiBaiTap</span>
+                            <h5 class="fw-bold text-brand-teal text-truncate">@item.TenBaiTap</h5>
+                            <hr class="mx-auto my-2" style="width: 30px;">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-dark rounded-pill px-3"
+                                    data-toggle="modal" data-target="#modal-@item.BaiTapID"
+                                    data-bs-toggle="modal" data-bs-target="#modal-@item.BaiTapID">
+                                Xem hướng dẫn
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal-@item.BaiTapID" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content border-0">
+                            <div class="modal-header bg-brand-teal text-white">
+                                <h5 class="modal-title fw-bold">
+                                    <i class="fas @icon me-2"></i>@item.TenBaiTap
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-dismiss="modal" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <h6 class="fw-bold text-decoration-underline mb-2">Mô tả kỹ thuật:</h6>
+                                <p class="text-muted" style="line-height: 1.6; white-space: pre-line;">
+                                    @(string.IsNullOrEmpty(item.MoTa) ? "Đang cập nhật..." : item.MoTa)
+                                </p>
+                                <div class="alert alert-info small mt-3">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Bạn có thể thêm bài tập này vào <strong>Nhật ký tập luyện</strong> hằng ngày.
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5 text-muted">
+                <i class="fas fa-search fa-3x mb-3 opacity-25"></i>
+                <p>Không tìm thấy bài tập nào.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-up:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+    }
+</style>

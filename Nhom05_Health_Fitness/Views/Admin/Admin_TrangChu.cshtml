@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Admin_TrangChu";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var thietBiBaoTri = ViewBag.ThietBiBaoTri as List<Nhom05_Health_Fitness.Models.ThietBiTap>;
+    int count = thietBiBaoTri?.Count ?? 0;
+    int tongHoiVien = ViewBag.TongHoiVien ?? 0;
+    int tongHLV = ViewBag.TongHLV ?? 0;
+    decimal doanhThuThang = ViewBag.DoanhThuThang ?? 0m;
+   
+}
+@using Nhom05_Health_Fitness.Models;
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>Dashboard Tổng quan</h2>
+        <p>Chào mừng trở lại, Admin! Hãy kiểm tra các thông số quan trọng của phòng tập.</p>
+    </div>
+    
+</div>
+
+<a class="alert-maintenance" href="@Url.Action("Admin_QuanLyThietBi", "Admin")" style="/* ... */">
+
+    <div class="alert-icon" style="color: var(--accent-yellow); font-size: 18px; margin-right: 15px; margin-top: 2px;">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <div class="alert-content" style="flex-grow: 1;">
+        <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 15px;">
+            THIẾT BỊ ĐANG BẢO TRÌ
+        </h4>
+
+        <p style="margin: 0 0 10px 0; color: var(--text-secondary); font-size: 13px;">
+            Hiện có @count thiết bị đang không hoạt động 
+        </p>
+
+        @if (count > 0)
+        {
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 13px;">
+                @foreach (var item in thietBiBaoTri)
+                {
+                    
+                    <li>@item.TenThietBi.Trim(): đang bảo trì.</li>
+
+                }
+            </ul>
+        }
+
+    </div>
+
+</a>
+
+<div class="stats-grid">
+
+   
+    <a href="@Url.Action("Admin_DanhSachHoiVien", "Admin")" class="stat-card">
+        <div class="stat-card-header">
+            <span>TỔNG HỘI VIÊN</span>
+            <div class="stat-icon-wrapper members"><i class="fas fa-users"></i></div>
+        </div>
+        <div class="stat-value">@tongHoiVien</div>
+        <div class="stat-change increase"><i class="fas fa-arrow-up"></i> 10% So với tháng trước</div>
+    </a>
+
+    
+    <a href="@Url.Action("Admin_DanhSachHLV", "Admin")" class="stat-card">
+        <div class="stat-card-header">
+            <span>HUẤN LUYỆN VIÊN</span>
+            <div class="stat-icon-wrapper coaches"><i class="fas fa-dumbbell"></i></div>
+        </div>
+        <div class="stat-value">@tongHoiVien</div>
+        
+    </a>
+
+    @* Stat 3: Doanh thu tháng (Dựa trên usp_LayBaoCaoDoanhThuNam) *@
+    <a class="stat-card" style="text-decoration: none"href="@Url.Action("Admin_BaoCaoDoanhThu","Admin")">
+        <div class="stat-card-header">
+            <span>DOANH THU THÁNG</span>
+            <div class="stat-icon-wrapper revenue"><i class="fas fa-chart-line"></i></div>
+        </div>
+        <div class="stat-value">@doanhThuThang.ToString("N0") VNĐ</div>
+       
+    </a>
+
+    @* Stat 4: Gói tập phổ biến (Dựa trên usp_Top4GoiTapPhoBien) *@
+    <div class="stat-card">
+        <div class="stat-card-header">
+            <span>GÓI TẬP PHỔ BIẾN</span>
+            <div class="stat-icon-wrapper maintenance"><i class="fas fa-fire"></i></div>
+        </div>
+        <div class="stat-value">Gói 12 tháng</div> @* Lấy từ usp_Top4GoiTapPhoBien *@
+        <div class="stat-change pending">Đã đăng ký 3 lần</div>
+    </div>
+</div>
+
+<h3 style="color:var(--text-primary); margin-top: 40px; margin-bottom: 20px;">
+    👥 Hội viên "Mất Tích" (Chưa tập > 7 ngày)
+</h3>
+
+<div class="table-container">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th style="width: 30%;">TÊN THÀNH VIÊN</th>
+                <th style="width: 20%;">TÀI KHOẢN</th>
+                <th style="width: 20%;">NGÀY TẬP GẦN NHẤT</th>
+                <th style="width: 20%;">SỐ NGÀY CHƯA TẬP</th>
+                <th style="width: 10%; text-align: right;">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* Lặp qua kết quả từ fn_HocVienMatTich() *@
+            <tr>
+                <td>
+                    <div class="user-info-cell">
+                        <i class="fas fa-user-circle" style="font-size: 30px; color: var(--text-secondary);"></i>
+                        <div class="user-details">
+                            <span class="user-name">Võ Văn Đức</span>
+                            <span class="user-username">duc.vo@gmail.com</span>
+                        </div>
+                    </div>
+                </td>
+                <td>ND00005</td>
+                <td>@DateTime.Now.AddDays(-10).ToString("dd/MM/yyyy")</td>
+                <td><span style="color:#F1416C; font-weight: bold;">10 ngày</span></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-action" title="Gửi lời nhắc"><i class="fas fa-bell"></i></button>
+                        <button class="btn-action" title="Xem hồ sơ"><i class="fas fa-eye"></i></button>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+

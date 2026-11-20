@@ -1,0 +1,212 @@
+﻿@model Nhom05_Health_Fitness.Models.DashboardHLVViewModel
+
+@{
+    ViewBag.Title = "HLVTrangChu";
+    Layout = "~/Views/Shared/_LayoutHLV.cshtml";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="~/Content/styleHLV.css" rel="stylesheet" />
+
+
+<section class="dashboard-overview">
+    <h2>Dashboard Overview</h2>
+    <p>Welcome back, Coach @Session["TenHLV"]. Here's your weekly summary.</p>
+
+    @if (Model.HocVienKhongTap != null && Model.HocVienKhongTap.Any())
+    {
+        <div class="alert-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <span><strong>@Model.HocVienKhongTap.Count() students have not trained for 7+ days:</strong></span>
+                <ul>
+                    @foreach (var student in Model.HocVienKhongTap)
+                    {
+                        <li>@student.HoTen - Last session @student.SoNgayKhongTap days ago</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <span class="stat-value">@Model.TongHocVien</span>
+            <span class="stat-label">Total Students</span>
+            <span class="stat-change">+5 this month</span>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-calendar-check"></i>
+            <span class="stat-value">@Model.SoBuoiTuanNay</span>
+            <span class="stat-label">Sessions This Week</span>
+            <span class="stat-change">@Model.SoBuoiSapToi scheduled</span>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <span class="stat-value">@Model.GioTapThangNay</span>
+            <span class="stat-label">Hours This Month</span>
+            <span class="stat-change">+12 hrs</span>
+        </div>
+        <div class="stat-card alert-card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span class="stat-value">@Model.HocVienKhongTap.Count()</span>
+            <span class="stat-label">Inactive Alerts</span>
+            <span class="stat-change">>7 days</span>
+        </div>
+    </div>
+
+    <div class="bottom-sections">
+        <div class="bottom-card">
+            <h3>Sessions Per Month</h3>
+            <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                <canvas id="sessionsChart"></canvas>
+            </div>
+        </div>
+        <div class="bottom-card">
+            <h3>Average Student Progress</h3>
+            <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // === THAY ĐỔI QUAN TRỌNG: Lấy dữ liệu động từ Model (C# -> JS) ===
+            const sessionLabels = @Html.Raw(Json.Encode(Model.SessionsPerMonthLabels));
+            const sessionData = @Html.Raw(Json.Encode(Model.SessionsPerMonthData));
+            const progressLabels = @Html.Raw(Json.Encode(Model.StudentProgressLabels));
+            const progressData = @Html.Raw(Json.Encode(Model.StudentProgressData));
+            // === HẾT THAY ĐỔI ===
+
+            // === Màu sắc: ĐÃ THAY ĐỔI THÀNH TRẮNG VÀ ĐẬM HƠN ===
+            const chartLineColor = '#3a3a4c'; // Màu đường kẻ trục (đen nhạt hơn để có thể nhìn thấy)
+            const chartTextColor = '#ffffff'; // Màu chữ (trắng tinh)
+            const barColor = '#a34c5f';       // Màu thanh/điểm dữ liệu (giữ nguyên hoặc điều chỉnh nếu muốn)
+
+            // === Tùy chọn Tooltip (cho đẹp hơn và màu chữ trắng) ===
+            const customTooltip = {
+                enabled: true,
+                backgroundColor: '#1a1a2e', // Nền tooltip đậm
+                titleColor: '#ffffff',      // Chữ tiêu đề tooltip trắng
+                bodyColor: '#e0e0e0',       // Chữ nội dung tooltip trắng nhạt
+                borderColor: '#a34c5f',
+                borderWidth: 1,
+                padding: 10,
+                cornerRadius: 8,
+                displayColors: true,
+                boxPadding: 4,
+                titleFont: { family: 'Poppins', weight: '600' },
+                bodyFont: { family: 'Poppins', weight: '400' },
+            };
+
+
+            // === 1. Biểu đồ Cột (Sessions Per Month) ===
+            const ctxSessions = document.getElementById('sessionsChart').getContext('2d');
+
+            const barGradient = ctxSessions.createLinearGradient(0, 0, 0, 300);
+            barGradient.addColorStop(0, '#a34c5f');
+            barGradient.addColorStop(1, '#6a2a2a');
+
+            new Chart(ctxSessions, {
+                type: 'bar',
+                data: {
+                    labels: sessionLabels,
+                    datasets: [{
+                        label: 'Sessions',
+                        data: sessionData,
+                        backgroundColor: barGradient,
+                        borderColor: 'rgba(0,0,0,0)',
+                        borderRadius: 5,
+                        hoverBackgroundColor: '#c76e81'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: chartLineColor, drawBorder: false },
+                            ticks: {
+                                color: chartTextColor, // Màu chữ trục Y
+                                font: { family: 'Poppins' }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: chartTextColor, // Màu chữ trục X
+                                font: { family: 'Poppins' }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: customTooltip
+                    }
+                }
+            });
+
+            // === 2. Biểu đồ Đường (Average Student Progress) ===
+            const ctxProgress = document.getElementById('progressChart').getContext('2d');
+
+            const lineGradient = ctxProgress.createLinearGradient(0, 0, 0, 300);
+            lineGradient.addColorStop(0, 'rgba(163, 76, 95, 0.4)');
+            lineGradient.addColorStop(1, 'rgba(106, 42, 42, 0.05)');
+
+            new Chart(ctxProgress, {
+                type: 'line',
+                data: {
+                    labels: progressLabels,
+                    datasets: [{
+                        label: 'Cân nặng (kg)',
+                        data: progressData,
+                        borderColor: barColor,
+                        fill: true,
+                        backgroundColor: lineGradient,
+                        pointBackgroundColor: barColor,
+                        pointBorderColor: '#fff9f5',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: chartLineColor, drawBorder: false },
+                            ticks: {
+                                color: chartTextColor, // Màu chữ trục Y
+                                font: { family: 'Poppins' }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: chartTextColor, // Màu chữ trục X
+                                font: { family: 'Poppins' }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: customTooltip
+                    }
+                }
+            });
+        });
+    </script>
+}

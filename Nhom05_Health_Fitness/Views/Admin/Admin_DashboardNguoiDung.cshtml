@@ -1,0 +1,105 @@
+﻿@* File: Views/NguoiDung/DashboardNguoiDung.cshtml (KHÔNG KHAI BÁO @model) *@
+@{
+    ViewBag.Title = "Dashboard Người dùng";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml"; // Giả sử Layout của người dùng
+
+    // Lấy dữ liệu từ ViewBag (Sử dụng dynamic để truy cập)
+    dynamic userInfo = ViewBag.UserInfo;
+    List<dynamic> activePackages = ViewBag.ActivePackages;
+    List<dynamic> upcomingSchedules = ViewBag.UpcomingSchedules;
+}
+@using System.Linq;
+
+<div class="user-dashboard-header">
+    @if (userInfo != null)
+    {
+        <h2>Xin chào, @userInfo.HoTen!</h2>
+        <p>Tài khoản: @userInfo.TenDangNhap</p>
+    }
+</div>
+
+@* --------------------------------------------- *@
+@* PHẦN 1: CHỈ SỐ SỨC KHỎE HIỆN TẠI *@
+@* --------------------------------------------- *@
+<div class="info-card">
+    <h3>📊 Chỉ số sức khỏe mới nhất</h3>
+    @if (userInfo != null)
+    {
+        <p>Cân nặng: **@userInfo.CanNangMoiNhat kg**</p>
+        <p>Chỉ số BMI: **@userInfo.BMI**</p>
+    }
+    else
+    {
+        <p>Chưa có dữ liệu chỉ số cơ thể. Hãy cập nhật tiến trình của bạn!</p>
+    }
+</div>
+
+@* --------------------------------------------- *@
+@* PHẦN 2: GÓI TẬP ĐANG HOẠT ĐỘNG *@
+@* --------------------------------------------- *@
+<div class="card-section">
+    <h3>📦 Gói tập đang hoạt động (@(activePackages?.Count ?? 0) gói)</h3>
+    @if (activePackages != null && activePackages.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên Gói</th>
+                    <th>Ngày ĐK</th>
+                    <th>Ngày Hết Hạn</th>
+                    <th>Số Ngày Còn Lại</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pkg in activePackages)
+                {
+                    <tr>
+                        <td>@pkg.TenGoi</td>
+                        <td>@(((DateTime)pkg.NgayDangKy).ToString("dd/MM/yyyy"))</td>
+                        <td>@(((DateTime)pkg.NgayHetHan).ToString("dd/MM/yyyy"))</td>
+                        <td><span style="font-weight: bold; color: @(pkg.SoNgayConLai > 30 ? "green" : "red");">@pkg.SoNgayConLai ngày</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Bạn không có gói tập nào đang hoạt động. Hãy đăng ký ngay!</p>
+    }
+</div>
+
+@* --------------------------------------------- *@
+@* PHẦN 3: LỊCH HUẤN LUYỆN SẮP TỚI *@
+@* --------------------------------------------- *@
+<div class="card-section">
+    <h3>🗓️ Lịch huấn luyện sắp tới (@(upcomingSchedules?.Count ?? 0) buổi)</h3>
+    @if (upcomingSchedules != null && upcomingSchedules.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ngày Tập</th>
+                    <th>Nội Dung</th>
+                    <th>HLV</th>
+                    <th>Trạng Thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var schedule in upcomingSchedules)
+                {
+                    <tr>
+                        <td>@(((DateTime)schedule.Ngay).ToString("dd/MM/yyyy"))</td>
+                        <td>@schedule.NoiDung</td>
+                        <td>@schedule.TenHLV</td>
+                        <td>@schedule.TrangThai</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Bạn không có lịch tập nào được lên kế hoạch trong tương lai gần.</p>
+    }
+</div>

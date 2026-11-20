@@ -1,0 +1,208 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.usp_DanhSachPhanQuyenResult>
+
+@{
+    ViewBag.Title = "Danh sách Hội viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@* --- 1. HEADER --- *@
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>👥 Danh Sách Hội Viên & Phân Quyền</h2>
+        <p>Quản lý thông tin tài khoản và cấp quyền truy cập.</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+        @* Hiển thị thông báo nếu có *@
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success mb-0 py-1 px-3 d-flex align-items-center">
+                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger mb-0 py-1 px-3 d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-2"></i> @TempData["Error"]
+            </div>
+        }
+
+        <a href="@Url.Action("Register", "Account")" class="btn-refresh" style="background-color: var(--accent-green); color: white; text-decoration: none; display: flex; align-items: center;">
+            <i class="fas fa-plus" style="margin-right: 8px;"></i> Thêm mới
+        </a>
+    </div>
+</div>
+
+@* --- 2. TABLE CONTAINER --- *@
+<div class="table-container" style="margin-top: 20px;">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th style="width: 30%;">THÔNG TIN HỘI VIÊN</th>
+                <th style="width: 15%;">TÊN ĐĂNG NHẬP</th>
+                <th style="width: 10%;">VAI TRÒ</th>
+                <th style="width: 15%;">NGÀY CẬP NHẬT</th>
+                <th style="width: 30%; text-align: right;">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @* Cột 1: Avatar + Tên + Email *@
+                        <td>
+                            <div class="user-info-cell">
+                                <div style="width: 40px; height: 40px; background-color: var(--bg-dark-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 20px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+
+                                <div class="user-details">
+                                    <span class="user-name" style="color: var(--text-primary); font-weight: 600;">
+                                        @(string.IsNullOrEmpty(item.HoTen) ? "Chưa cập nhật tên" : item.HoTen)
+                                    </span>
+                                    <span class="user-username" style="color: var(--text-secondary); font-size: 12px;">
+                                        @item.Email
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        @* Cột 2: Username *@
+                        <td>
+                            <span style="font-family: monospace; color: var(--accent-green); background: rgba(80, 205, 137, 0.1); padding: 4px 8px; border-radius: 4px;">
+                                @item.TenDangNhap
+                            </span>
+                        </td>
+
+                        @* Cột 3: Vai trò *@
+                        <td>
+                            @if (item.QuyenHienTai == "Admin")
+                            {
+                                <span class="badge bg-danger">Admin</span>
+                            }
+                            else if (item.QuyenHienTai == "HLV")
+                            {
+                                <span class="badge bg-warning text-dark">HLV</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Hội viên</span>
+                            }
+                        </td>
+
+                        @* Cột 4: Ngày cập nhật *@
+                        <td style="color: var(--text-secondary);">
+                            @(item.NgayCapNhat.HasValue ? item.NgayCapNhat.Value.ToString("dd/MM/yyyy") : "N/A")
+                        </td>
+
+                        @* Cột 5: Thao tác (Đã thêm nút Phân quyền) *@
+                        <td>
+                            <div class="action-buttons" style="justify-content: flex-end;">
+                                @* Nút Xem *@
+                                <a href="@Url.Action("Admin_ChiTietUser", "Admin", new { id = item.NguoiDungID.Trim() })"
+                                   class="btn-action" title="Xem chi tiết" style="background-color: #3B3B5B; color: #fff;">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                @* --- NÚT PHÂN QUYỀN (MỚI) --- *@
+                                <button type="button"
+                                        class="btn-action"
+                                        title="Phân quyền"
+                                        style="background-color: #d35400; color: #fff; border: none; cursor: pointer;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalPhanQuyen"
+                                        onclick="setPhanQuyen('@item.NguoiDungID.Trim()', '@item.TenDangNhap')">
+                                    <i class="fas fa-user-shield"></i>
+                                </button>
+                                @* --------------------------- *@
+
+                                @* Nút Sửa *@
+                                <a href="@Url.Action("Admin_SuaUser", "Admin", new { id = item.NguoiDungID.Trim() })"
+                                   class="btn-action" title="Chỉnh sửa" style="background-color: var(--bg-dark-tertiary);">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                        <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                        Không tìm thấy hội viên nào trong hệ thống.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* --- 3. MODAL PHÂN QUYỀN --- *@
+<div class="modal fade" id="modalPhanQuyen" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: #1e1e2d; color: #fff; border: 1px solid #3b3b5b;">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-user-shield text-warning me-2"></i> Cấp Quyền Tài Khoản</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="@Url.Action("Admin_PhanQuyen", "Admin")" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <p>Tài khoản: <strong id="spanTenUser" class="text-warning">...</strong></p>
+                    <input type="hidden" name="nguoiDungID" id="inputID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Chọn vai trò:</label>
+                        <select name="vaiTroID" class="form-select bg-dark text-white border-secondary">
+                            <option value="2">Hội viên (User)</option>
+                            <option value="3">Huấn luyện viên (HLV)</option>
+                            <option value="1">Quản trị viên (Admin)</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-warning small mb-0">
+                        * User cần đăng nhập lại để áp dụng quyền mới.
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="submit" class="btn btn-primary w-100">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setPhanQuyen(id, ten) {
+        document.getElementById('inputID').value = id;
+        document.getElementById('spanTenUser').innerText = ten;
+    }
+</script>
+
+@* --- 4. SCRIPT & STYLE --- *@
+<script>
+    function setPhanQuyen(id, ten) {
+        document.getElementById('inputID').value = id;
+        document.getElementById('spanTenUser').innerText = ten;
+    }
+</script>
+
+<style>
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        margin-left: 5px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-action:hover {
+            opacity: 0.8;
+        }
+</style>

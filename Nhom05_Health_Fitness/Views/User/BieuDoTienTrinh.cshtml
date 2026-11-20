@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = "Biểu đồ tiến trình";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+    // Lấy dữ liệu thống kê
+    decimal change = ViewBag.Change ?? 0;
+    bool hasData = ViewBag.Labels != null && ((string[])ViewBag.Labels).Length > 0;
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">
+            <i class="fas fa-chart-line me-2"></i>Theo dõi tiến trình
+        </h2>
+        <p class="text-muted">"Những con số không biết nói dối - Hãy xem bạn đã đi xa đến đâu"</p>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    @if (hasData)
+    {
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center py-4" style="background-color: #f8f9fa;">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted text-uppercase fw-bold small">Khởi điểm</div>
+                        <h3 class="fw-bold" style="color: var(--brand-grey);">@ViewBag.StartWeight <small>kg</small></h3>
+                        <i class="fas fa-flag-checkered text-muted opacity-25 fa-2x mt-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow h-100 text-center py-4 bg-brand-teal text-white position-relative overflow-hidden">
+                    <div class="card-body position-relative z-index-2">
+                        <div class="mb-2 text-white-50 text-uppercase fw-bold small">Hiện tại</div>
+
+                        <h1 class="fw-bold text-brand-neon display-3 mb-0">
+                            @ViewBag.CurrentWeight <small style="font-size: 0.4em; color: white;">kg</small>
+                        </h1>
+
+                        @{
+                            // 1. Ép kiểu an toàn
+                            var bmiList = ViewBag.DataBMI as decimal?[];
+                            decimal currentBMI = (bmiList != null && bmiList.Length > 0) ? (bmiList.Last() ?? 0) : 0;
+                        }
+
+                        <div class="mt-2 d-flex justify-content-center align-items-end">
+                            <span class="text-white-50 fw-bold me-2" style="font-size: 1.2rem; padding-bottom: 5px;">BMI:</span>
+                            <span class="fw-bold text-warning" style="font-size: 2.5rem; line-height: 1;">
+                                @(currentBMI > 0 ? currentBMI.ToString("0.0") : "-")
+                            </span>
+                        </div>
+
+                        @if (currentBMI > 0)
+                        {
+                            <div class="mt-1 small text-white-50">
+                                @if (currentBMI < 18.5m)
+                                {<span>(Thiếu cân)</span>;
+                                }
+                                else if (currentBMI < 24.9m)
+                                { <span class="text-success">(Bình thường)</span>;
+                                }
+                                else
+                                { <span class="text-warning">(Thừa cân)</span>;
+                                }
+                            </div>
+                        }
+
+                    </div>
+                    <i class="fas fa-weight position-absolute bottom-0 end-0 opacity-10 fa-5x me-n3 mb-n3"></i>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 text-center py-4" style="background-color: #f8f9fa;">
+                    <div class="card-body">
+                        <div class="mb-2 text-muted text-uppercase fw-bold small">Thay đổi</div>
+
+                        @if (change < 0)
+                        {
+                            // Giảm cân -> Màu xanh lá (Tốt)
+                            <h3 class="fw-bold text-success">
+                                <i class="fas fa-arrow-down me-1"></i> @Math.Abs(change) <small>kg</small>
+                            </h3>
+                            <span class="text-success small">Tuyệt vời! Tiếp tục phát huy</span>
+                        }
+                        else if (change > 0)
+                        {
+                            // Tăng cân -> Màu cam (Cảnh báo hoặc Bulking)
+                            <h3 class="fw-bold text-warning">
+                                <i class="fas fa-arrow-up me-1"></i> @Math.Abs(change) <small>kg</small>
+                            </h3>
+                            <span class="text-muted small">Đang tăng cân</span>
+                        }
+                        else
+                        {
+                            <h3 class="fw-bold text-muted">0 <small>kg</small></h3>
+                            <span class="text-muted small">Giữ nguyên</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow border-0 rounded-4 p-3 mb-4">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-muted mb-0">Biểu đồ cân nặng</h5>
+                <span class="badge bg-light text-dark border">Đơn vị: Kg</span>
+            </div>
+            <div class="card-body">
+                <canvas id="progressChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light" style="width: 120px; height: 120px;">
+                    <i class="fas fa-chart-area fa-4x text-muted opacity-50"></i>
+                </div>
+            </div>
+            <h4 class="fw-bold text-muted">Chưa có dữ liệu theo dõi</h4>
+            <p class="text-muted mb-4">Hãy cập nhật cân nặng của bạn ngay hôm nay để bắt đầu vẽ biểu đồ!</p>
+
+            <button type="button" class="btn btn-neon fw-bold px-5 shadow-sm text-dark" data-bs-toggle="modal" data-bs-target="#modalCanNang">
+                <i class="fas fa-plus-circle me-2"></i> Cập nhật ngay
+            </button>
+        </div>
+    }
+</div>
+
+@if (hasData)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. Nhận dữ liệu từ ViewBag (Server)
+            var labels = @Html.Raw(Json.Encode(ViewBag.Labels));
+            var dataWeight = @Html.Raw(Json.Encode(ViewBag.DataWeight));
+
+            // 2. Cấu hình Chart.js
+            var ctx = document.getElementById('progressChart').getContext('2d');
+
+            // Tạo Gradient màu vàng cho đẹp
+            var gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientFill.addColorStop(0, 'rgba(242, 194, 48, 0.5)'); // Màu vàng đậm ở trên
+            gradientFill.addColorStop(1, 'rgba(242, 194, 48, 0.0)'); // Mờ dần xuống dưới
+
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cân nặng (Kg)',
+                        data: dataWeight,
+                        borderColor: '#F2C230', // Màu viền Vàng Neon (Khớp brand)
+                        backgroundColor: gradientFill, // Màu nền Gradient
+                        borderWidth: 3,
+                        pointBackgroundColor: '#0C2659', // Điểm tròn màu Navy
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.4, // Độ cong mềm mại (0 là đường thẳng)
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Ẩn chú thích vì chỉ có 1 đường
+                        },
+                        tooltip: {
+                            backgroundColor: '#0C2659',
+                            titleColor: '#F2C230',
+                            bodyColor: '#fff',
+                            padding: 10,
+                            cornerRadius: 8,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false, // Không bắt đầu từ 0 để thấy rõ dao động
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Modern Gym</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <link href="~/Content/ThuocTinhUser.css" rel="stylesheet" />
+
+    @*<style>
+        :root {
+            --brand-teal: #0C2659 !important;
+            --brand-neon: #F2C230 !important;
+            --brand-orange: #F2A03D !important;
+            --brand-coral: #F27B50 !important;
+            --brand-light: #FDFBF7 !important;
+            --brand-grey: #64748B !important;
+        }
+
+        .btn-neon {
+            background-color: var(--brand-neon) !important;
+            color: var(--brand-teal) !important;
+            border-color: var(--brand-neon) !important;
+        }
+
+            .btn-neon:hover {
+                background-color: var(--brand-coral) !important;
+                border-color: var(--brand-coral) !important;
+                color: white !important;
+                box-shadow: 0 0 15px rgba(242, 123, 80, 0.6) !important;
+            }
+
+        .bg-brand-teal {
+            background-color: var(--brand-teal) !important;
+        }
+    </style>*@
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    @{
+        // Kiểm tra session xem user đã login chưa
+        bool isLogged = Session["NguoiDungID"] != null;
+
+        // Tạo sẵn link Login để dùng ở dưới cho gọn
+        string loginUrl = Url.Action("Login", "Account");
+    }
+
+    <header>
+        <nav class="navbar navbar-expand-lg bg-brand-teal navbar-custom fixed-top shadow-sm">
+            <div class="container">
+
+                <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "User")">
+                    <i class="fas fa-dumbbell fa-2x me-2" style="color: var(--brand-neon);"></i>
+                    <span class="fw-bold fs-3 text-white">M-GYM</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" style="border-color: var(--brand-neon);">
+                    <i class="fas fa-bars" style="color: var(--brand-neon);"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="@Url.Action("Index", "User")">Trang chủ</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navTapLuyen" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Tập luyện
+                            </a>
+                            <ul class="dropdown-menu shadow" aria-labelledby="navTapLuyen">
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("NhatKy", "User") : loginUrl)">
+                                        <i class="fas fa-book me-2 text-muted"></i>Nhật ký tập (Lịch sử)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("TaoBuoiTap", "User") : loginUrl)">
+                                        <i class="fas fa-plus-circle me-2 text-muted"></i>Ghi nhận buổi tập
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("ThuVienBaiTap", "User")">
+                                        <i class="fas fa-list me-2 text-muted"></i>Thư viện bài tập
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navSucKhoe" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sức khỏe
+                            </a>
+                            <ul class="dropdown-menu shadow" aria-labelledby="navSucKhoe">
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("HoSoCaNhan", "User") : loginUrl)">
+                                        <i class="fas fa-weight me-2 text-muted"></i>Cập nhật cân nặng
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("BieuDoTienTrinh", "User") : loginUrl)">
+                                        <i class="fas fa-chart-line me-2 text-muted"></i>Biểu đồ tiến trình
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("MucTieu", "User") : loginUrl)">
+                                        <i class="fas fa-chart-line me-2 text-muted"></i>Mục tiêu
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navDichVu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dịch vụ & Gói tập
+                            </a>
+                            <ul class="dropdown-menu shadow" aria-labelledby="navDichVu">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("TatCaGoiTap", "User")">
+                                        <i class="fas fa-shopping-cart me-2 text-muted"></i>Mua gói tập
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@(isLogged ? Url.Action("LichSuGoiTap", "User") : loginUrl)">
+                                        <i class="fas fa-history me-2 text-muted"></i>Lịch sử & Thanh toán
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navHLV" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Huấn luyện viên
+                            </a>
+                            <ul class="dropdown-menu shadow" aria-labelledby="navHLV">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("DanhSachHLV", "User")">
+                                        <i class="fas fa-users me-2 text-muted"></i>Danh sách HLV
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("LichHenCuaToi", "User")">
+                                        <i class="fas fa-users me-2 text-muted"></i>Lịch hẹn của tôi
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        @if (isLogged)
+                        {
+                            @Html.Action("HienThiLoiNhac", "User")
+
+                            // --- ĐÃ ĐĂNG NHẬP ---
+                            <div class="dropdown">
+                                <a href="#" class="text-white text-decoration-none dropdown-toggle fw-bold" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user-circle fa-lg me-1"></i> Hi, @Session["TenHienThi"]
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("HoSoCaNhan", "User")">
+                                            <i class="fas fa-id-card me-2 text-muted"></i>Hồ sơ cá nhân
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("DoiMatKhau", "User")">
+                                            <i class="fas fa-key me-2 text-muted"></i>Đổi mật khẩu
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="@Url.Action("Logout", "Account")">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            // --- CHƯA ĐĂNG NHẬP ---
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-neon btn-sm fw-bold text-dark">
+                                Đăng nhập
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow-1" style="margin-top: 76px;">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-brand-teal text-white pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="fw-bold mb-3" style="color: var(--brand-neon)">M-GYM SYSTEM</h4>
+                    <p style="color: var(--brand-grey);">Hệ thống phòng tập thế hệ mới, kết hợp công nghệ và không gian xanh.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Liên kết</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-white opacity-75 hover-neon">Về chúng tôi</a></li>
+                        <li><a href="#" class="text-decoration-none text-white opacity-75 hover-neon">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Liên hệ</h5>
+                    <p class="mb-1"><i class="fas fa-phone-alt me-2" style="color: var(--brand-neon)"></i> 1900 123 456</p>
+                    <p><i class="fas fa-envelope me-2" style="color: var(--brand-neon)"></i> support@mgym.vn</p>
+                </div>
+            </div>
+            <hr style="border-color: var(--brand-grey);">
+            <div class="text-center small" style="color: var(--brand-grey);">
+                &copy; 2024 M-Gym. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    <div class="modal fade" id="modalCanNang" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-brand-teal text-white">
+                    <h6 class="modal-title fw-bold">CẬP NHẬT CÂN NẶNG</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="@Url.Action("CapNhatCanNangNhanh", "User")" method="post">
+                    <div class="modal-body text-center">
+                        <i class="fas fa-weight-scale fa-3x text-brand-teal mb-3"></i>
+                        <div class="form-floating mb-3">
+                            <input type="number" step="0.1" name="canNang" class="form-control text-center fw-bold fs-4" id="floatingWeight" placeholder="Kg" required>
+                            <label for="floatingWeight">Nhập số kg hiện tại</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center border-0 pt-0">
+                        <button type="submit" class="btn btn-neon fw-bold w-100">LƯU LẠI</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

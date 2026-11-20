@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.LoiNhac>
+
+@{
+    // Đếm số lượng thông báo
+    int count = Model != null ? Model.Count() : 0;
+}
+
+<li class="nav-item dropdown me-3">
+    <a class="nav-link dropdown-toggle position-relative" href="#" id="bellDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-bell fa-lg text-white-50"></i>
+
+        @if (count > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light shadow-sm"
+                  style="font-size: 0.6rem; transform: translate(-50%, 10%) !important;">
+                @count
+            </span>
+        }
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="bellDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+        <li>
+            <h6 class="dropdown-header text-uppercase fw-bold text-brand-teal bg-light py-2">
+                <i class="fas fa-info-circle me-1"></i> Thông báo mới
+            </h6>
+        </li>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <li>
+                    <a class="dropdown-item py-2 border-bottom" href="#">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 mt-1">
+                                @if (item.NoiDung.ToLower().Contains("chúc mừng") || item.NoiDung.ToLower().Contains("hoàn thành"))
+                                {
+                                    <div class="rounded-circle bg-success bg-opacity-10 text-success p-2">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                }
+                                else if (item.NoiDung.ToLower().Contains("hết hạn") || item.NoiDung.ToLower().Contains("nhắc"))
+                                {
+                                    <div class="rounded-circle bg-warning bg-opacity-10 text-warning p-2">
+                                        <i class="fas fa-exclamation"></i>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-2">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                }
+                            </div>
+
+                            <div>
+                                <p class="mb-1 text-wrap small fw-bold text-dark" style="line-height: 1.4;">@item.NoiDung</p>
+                                <small class="text-muted" style="font-size: 0.7rem;">
+                                    <i class="far fa-clock me-1"></i>
+                                    @(item.NgayNhac.HasValue ? item.NgayNhac.Value.ToString("dd/MM/yyyy") : "")
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="p-4 text-center text-muted">
+                <i class="far fa-bell-slash fa-2x mb-2 opacity-50"></i><br>
+                <small>Hiện chưa có thông báo nào</small>
+            </li>
+        }
+    </ul>
+</li>

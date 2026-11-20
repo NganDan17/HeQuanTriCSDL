@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.25, 31.125" name="Health">
+  <DataContextMoniker Name="/HealthDataContext" />
+  <nestedChildShapes>
+    <classShape Id="b1faec3d-8c50-4225-a65f-643ff553b42a" absoluteBounds="6.25, 3.625, 2, 1.7708968098958326">
+      <DataClassMoniker Name="/HealthDataContext/BaiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="45538eb7-9f41-49d2-a356-7545533d622e" absoluteBounds="6.265, 4.085, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6d0b798f-1b91-439e-8a2a-b8167acf1802" absoluteBounds="0.75, 15, 2, 1.3862939453124987">
+      <DataClassMoniker Name="/HealthDataContext/VaiTro" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9bdfc299-cb74-414b-a57d-ed8482bda8c1" absoluteBounds="0.765, 15.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3fa1d057-dae6-4623-8248-47f619476128" absoluteBounds="6.25, 8.75, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/HealthDataContext/BuoiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1fcad4ae-1ffe-418a-8e2f-235838c00aab" absoluteBounds="6.265, 9.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="48a1d850-7626-43be-b8c0-9c8ea4bddf73" absoluteBounds="9, 5.5, 2, 2.3478011067708344">
+      <DataClassMoniker Name="/HealthDataContext/ChiTietBuoiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5d1e8603-4f16-45e8-b885-a8c909588fe7" absoluteBounds="9.015, 5.96, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="80a75b50-b1e3-4249-a731-e5fec418d737" absoluteBounds="9.25, 14.625, 2, 1.9631982421874987">
+      <DataClassMoniker Name="/HealthDataContext/DangKyGoiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="39bfebdb-851c-48f3-85d9-2da5673aaaf6" absoluteBounds="9.265, 15.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0325d2fd-ca67-4e75-9686-e3e7d3309e04" absoluteBounds="9, 8.875, 2, 1.7708968098958344">
+      <DataClassMoniker Name="/HealthDataContext/DanhGiaBuoiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bdb569fd-9e71-4b18-bc57-b0ef7def9125" absoluteBounds="9.015, 9.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9ea8a4c0-83ae-4b2c-917b-d313525a7056" absoluteBounds="6.5, 0.75, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/HealthDataContext/GoiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="08ac348f-291f-49ee-ae70-ff39ed37596a" absoluteBounds="6.515, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="07957988-e368-48b8-ad99-8c649c4ffb0b" absoluteBounds="6.25, 25.375, 2, 2.3478011067708309">
+      <DataClassMoniker Name="/HealthDataContext/HoSo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="00254ef2-4ba9-45fe-a0e4-a628dc55f1c4" absoluteBounds="6.265, 25.835, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="06155bdd-c522-4351-a45f-34e2b3c37945" absoluteBounds="6.25, 19.625, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/HealthDataContext/HuanLuyenVien" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9ba562f8-6720-4fe2-b1d5-7312e923cb61" absoluteBounds="6.265, 20.085, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="12275523-1bc8-437e-96da-c6cc35b85fb5" absoluteBounds="9, 18.125, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/HealthDataContext/LichHuanLuyen" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5bef85b8-142b-4a57-b62d-bcd652b98fe8" absoluteBounds="9.015, 18.585, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a1809e4e-e72e-405f-9bb5-983b22cac82c" absoluteBounds="6.25, 6.25, 2, 1.7708968098958326">
+      <DataClassMoniker Name="/HealthDataContext/LoiNhac" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1773aca4-e9b3-48db-a7c5-1119d8f10393" absoluteBounds="6.265, 6.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="93c7b3eb-08b5-4ebd-870c-85b38386e75d" absoluteBounds="6.25, 14.125, 2, 1.9631982421874987">
+      <DataClassMoniker Name="/HealthDataContext/MucTieu" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8016f928-82e7-490e-9fd7-eb39038916eb" absoluteBounds="6.265, 14.585, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="448ef179-88d4-48dd-8973-e7efbba93285" absoluteBounds="3.5, 14.5, 2, 2.1554996744791648">
+      <DataClassMoniker Name="/HealthDataContext/NguoiDung" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4607b582-4faf-4a0e-98d6-0272159ae9b4" absoluteBounds="3.515, 14.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fa7c94cf-d3a6-4263-9fc1-69aed3314f6d" absoluteBounds="6.25, 22.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/HealthDataContext/SuKienSucKhoe" />
+      <nestedChildShapes>
+        <elementListCompartment Id="02d0d4b0-262f-40d5-aea0-bb538c12be37" absoluteBounds="6.265, 22.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c2025a52-6049-4586-82bc-f35fe8472b2d" absoluteBounds="12, 14.75, 2, 1.7708968098958344">
+      <DataClassMoniker Name="/HealthDataContext/ThanhToan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fa6b6d37-605b-4d23-bffe-82045b24d690" absoluteBounds="12.015, 15.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f52ffad9-951a-4013-8ab6-cc3c10844f04" absoluteBounds="6.25, 29.125, 2, 1.7708968098958309">
+      <DataClassMoniker Name="/HealthDataContext/ThietBiTap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a6cf66c7-f244-4639-b009-fff85fab1e59" absoluteBounds="6.265, 29.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a68dfc07-05c2-49e4-adf9-9ffc601c6a7b" absoluteBounds="6.25, 16.875, 2, 1.9631982421875023">
+      <DataClassMoniker Name="/HealthDataContext/TienTrinh" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b6bcdbc2-f256-4953-8325-b1633c9c3506" absoluteBounds="6.265, 17.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(8.25 : 4.51044840494792); (10 : 4.51044840494792); (10 : 5.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/BaiTap/BaiTap_ChiTietBuoiTap" />
+      <nodes>
+        <classShapeMoniker Id="b1faec3d-8c50-4225-a65f-643ff553b42a" />
+        <classShapeMoniker Id="48a1d850-7626-43be-b8c0-9c8ea4bddf73" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 8.75); (8.625 : 8.375); (8.625 : 6.67390055338542); (9 : 6.67390055338542)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/BuoiTap/BuoiTap_ChiTietBuoiTap" />
+      <nodes>
+        <classShapeMoniker Id="3fa1d057-dae6-4623-8248-47f619476128" />
+        <classShapeMoniker Id="48a1d850-7626-43be-b8c0-9c8ea4bddf73" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 9.76044840494792); (8.32291666666667 : 9.76044840494792 : JumpStart); (8.48958333333333 : 9.76044840494792 : JumpEnd); (8.72916666666667 : 9.76044840494792 : JumpStart); (8.89583333333333 : 9.76044840494792 : JumpEnd); (9 : 9.76044840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/BuoiTap/BuoiTap_DanhGiaBuoiTap" />
+      <nodes>
+        <classShapeMoniker Id="3fa1d057-dae6-4623-8248-47f619476128" />
+        <classShapeMoniker Id="0325d2fd-ca67-4e75-9686-e3e7d3309e04" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.40625 : 2.52089680989583); (8.40625 : 16.3694482421875); (8.72916666666667 : 16.3694482421875 : JumpStart); (8.89583333333333 : 16.3694482421875 : JumpEnd); (9.25 : 16.3694482421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/GoiTap/GoiTap_DangKyGoiTap" />
+      <nodes>
+        <classShapeMoniker Id="9ea8a4c0-83ae-4b2c-917b-d313525a7056" />
+        <classShapeMoniker Id="80a75b50-b1e3-4249-a731-e5fec418d737" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 19.9527498372396); (9 : 19.9527498372396)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/HuanLuyenVien/HuanLuyenVien_LichHuanLuyen" />
+      <nodes>
+        <classShapeMoniker Id="06155bdd-c522-4351-a45f-34e2b3c37945" />
+        <classShapeMoniker Id="12275523-1bc8-437e-96da-c6cc35b85fb5" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.5 : 14.5); (4.5 : 9.73159912109375); (6.25 : 9.73159912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_BuoiTap" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="3fa1d057-dae6-4623-8248-47f619476128" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 16.1975732421875); (8.32291666666667 : 16.1975732421875 : JumpStart); (8.48958333333333 : 16.1975732421875 : JumpEnd); (8.72916666666667 : 16.1975732421875 : JumpStart); (8.89583333333333 : 16.1975732421875 : JumpEnd); (9.25 : 16.1975732421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_DangKyGoiTap" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="80a75b50-b1e3-4249-a731-e5fec418d737" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.5 : 16.6554996744792); (4.5 : 26.5489005533854); (6.25 : 26.5489005533854)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_HoSo" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="07957988-e368-48b8-ad99-8c649c4ffb0b" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.0312525 : 16.6554996744792); (5.0312525 : 20.7027498372396); (5.21354541666667 : 20.7027498372396 : JumpStart); (5.38021208333333 : 20.7027498372396 : JumpEnd); (6.25 : 20.7027498372396)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_HuanLuyenVien" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="06155bdd-c522-4351-a45f-34e2b3c37945" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.9687475 : 16.6554996744792); (3.9687475 : 19.2315991210938); (4.41666666666667 : 19.2315991210938 : JumpStart); (4.58333333333333 : 19.2315991210938 : JumpEnd); (5.21354541666667 : 19.2315991210938 : JumpStart); (5.38021208333333 : 19.2315991210938 : JumpEnd); (8.72916666666667 : 19.2315991210938 : JumpStart); (8.89583333333333 : 19.2315991210938 : JumpEnd); (9 : 19.2315991210938)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_LichHuanLuyen" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="12275523-1bc8-437e-96da-c6cc35b85fb5" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.0312525 : 14.5); (5.0312525 : 7.13544840494792); (6.25 : 7.13544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_LoiNhac" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="a1809e4e-e72e-405f-9bb5-983b22cac82c" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 15.2940991210938); (6.25 : 15.2940991210938)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_MucTieu" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="93c7b3eb-08b5-4ebd-870c-85b38386e75d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 15.6931469726562); (3.5 : 15.6931469726562)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/VaiTro/VaiTro_NguoiDung" />
+      <nodes>
+        <classShapeMoniker Id="6d0b798f-1b91-439e-8a2a-b8167acf1802" />
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.29687875 : 16.6554996744792); (5.29687875 : 23.5777498372396); (6.25 : 23.5777498372396)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_SuKienSucKhoe" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="fa7c94cf-d3a6-4263-9fc1-69aed3314f6d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11.25 : 15.6354484049479); (12 : 15.6354484049479)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/DangKyGoiTap/DangKyGoiTap_ThanhToan" />
+      <nodes>
+        <classShapeMoniker Id="80a75b50-b1e3-4249-a731-e5fec418d737" />
+        <classShapeMoniker Id="c2025a52-6049-4586-82bc-f35fe8472b2d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 29.1862992741887); (8.8125 : 28.6237992741887); (8.8125 : 7.29210283007813); (9 : 7.29210283007813)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/ThietBiTap/ThietBiTap_ChiTietBuoiTap" />
+      <nodes>
+        <classShapeMoniker Id="f52ffad9-951a-4013-8ab6-cc3c10844f04" />
+        <classShapeMoniker Id="48a1d850-7626-43be-b8c0-9c8ea4bddf73" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.76562625 : 16.6554996744792); (4.76562625 : 17.8565991210938); (6.25 : 17.8565991210938)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/HealthDataContext/NguoiDung/NguoiDung_TienTrinh" />
+      <nodes>
+        <classShapeMoniker Id="448ef179-88d4-48dd-8973-e7efbba93285" />
+        <classShapeMoniker Id="a68dfc07-05c2-49e4-adf9-9ffc601c6a7b" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

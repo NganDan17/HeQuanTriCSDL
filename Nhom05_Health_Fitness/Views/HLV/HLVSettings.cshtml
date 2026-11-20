@@ -1,0 +1,174 @@
+﻿@model Nhom05_Health_Fitness.Models.HLVSettingsViewModel
+
+@{
+    ViewBag.Title = "Cài đặt tài khoản";
+    Layout = "~/Views/Shared/_LayoutHLV.cshtml";
+}
+<link href="~/Content/styleHLV.css" rel="stylesheet" />
+
+<div class="container-fluid mt-4" style="max-width: 1400px;">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <div>
+            <h2 class="text-white fw-bold mb-1">Cài đặt</h2>
+            <p class="text-muted mb-0">Quản lý hồ sơ cá nhân và cấu hình hệ thống.</p>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("HLVSettings", "HLV", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-custom mb-4" role="alert">
+                <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            </div>
+        }
+        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+
+                <div class="card-settings">
+                    <div class="card-settings-header">
+                        <i class="fas fa-id-card"></i> Thông tin cá nhân
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.FullName, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.FullName, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập họ và tên" } })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "name@example.com" } })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.PhoneNumber, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "09xxxxxxx" } })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.GioiTinh, new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.GioiTinh, new SelectList(new[] { "Nam", "Nữ", "Khác" }), "Chọn giới tính", new { @class = "form-select" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.NgaySinh, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.NgaySinh, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.SoNamKinhNghiem, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.SoNamKinhNghiem, new { htmlAttributes = new { @class = "form-control", type = "number", min = "0" } })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.ChieuCao_cm, new { @class = "control-label" })
+                            <div class="input-group">
+                                @Html.EditorFor(m => m.ChieuCao_cm, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.1" } })
+                                <span class="input-group-text">cm</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.CanNang_kg, new { @class = "control-label" })
+                            <div class="input-group">
+                                @Html.EditorFor(m => m.CanNang_kg, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.1" } })
+                                <span class="input-group-text">kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-settings">
+                    <div class="card-settings-header">
+                        <i class="fas fa-shield-alt"></i> Bảo mật
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-12 mb-2">
+                            <p class="text-muted small mb-0"><i class="fas fa-info-circle"></i> Chỉ điền bên dưới nếu bạn muốn đổi mật khẩu.</p>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.CurrentPassword, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.CurrentPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "********" } })
+                            @Html.ValidationMessageFor(m => m.CurrentPassword, "", new { @class = "text-danger small" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.NewPassword, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.NewPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Mật khẩu mới" } })
+                            @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card-settings">
+                    <div class="card-settings-header">
+                        <i class="fas fa-bell"></i> Thông báo & Cảnh báo
+                    </div>
+
+                    <div class="d-flex flex-column gap-2">
+                        <div class="toggle-item">
+                            <div class="toggle-content">
+                                <label class="form-check-label d-block text-white" for="InactiveStudentAlerts">Cảnh báo nghỉ lâu</label>
+                                <small class="text-muted">Báo khi học viên nghỉ > 7 ngày.</small>
+                            </div>
+                            <div class="form-check form-switch ms-3">
+                                @Html.CheckBoxFor(m => m.InactiveStudentAlerts, new { @class = "form-check-input", role = "switch", style = "width: 3em; height: 1.5em;" })
+                            </div>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-content">
+                                <label class="form-check-label d-block text-white" for="ScheduleReminders">Nhắc nhở lịch hẹn</label>
+                                <small class="text-muted">Nhắc trước buổi tập 30p.</small>
+                            </div>
+                            <div class="form-check form-switch ms-3">
+                                @Html.CheckBoxFor(m => m.ScheduleReminders, new { @class = "form-check-input", role = "switch", style = "width: 3em; height: 1.5em;" })
+                            </div>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-content">
+                                <label class="form-check-label d-block text-white" for="ScheduleConflicts">Cảnh báo trùng lịch</label>
+                                <small class="text-muted">Ngăn chặn đặt trùng giờ.</small>
+                            </div>
+                            <div class="form-check form-switch ms-3">
+                                @Html.CheckBoxFor(m => m.ScheduleConflicts, new { @class = "form-check-input", role = "switch", style = "width: 3em; height: 1.5em;" })
+                            </div>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-content">
+                                <label class="form-check-label d-block text-white" for="WeeklySummary">Báo cáo tuần</label>
+                                <small class="text-muted">Gửi email tổng kết mỗi T2.</small>
+                            </div>
+                            <div class="form-check form-switch ms-3">
+                                @Html.CheckBoxFor(m => m.WeeklySummary, new { @class = "form-check-input", role = "switch", style = "width: 3em; height: 1.5em;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-settings">
+                    <div class="d-grid gap-3">
+                        <button type="submit" class="btn btn-save-changes py-3">
+                            <i class="fas fa-save me-2"></i> Lưu thay đổi
+                        </button>
+                        <button type="button" class="btn btn-cancel py-2" onclick="location.href='@Url.Action("HLVTrangChu")'">
+                            <i class="fas fa-times me-2"></i> Hủy bỏ
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>

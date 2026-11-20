@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Đăng ký thành viên";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                
+                <div class="card-header bg-brand-teal text-white text-center py-4">
+                    <h3 class="fw-bold mb-0 text-uppercase">Tạo Tài Khoản Mới</h3>
+                    <p class="small opacity-75 mb-0">Bắt đầu hành trình thay đổi bản thân ngay hôm nay</p>
+                </div>
+
+                <div class="card-body p-5 bg-white">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger small mb-4">
+                            <i class="fas fa-exclamation-circle me-1"></i> @ViewBag.Error
+                        </div>
+                    }
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">HỌ VÀ TÊN</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-id-card text-muted"></i></span>
+                                <input type="text" name="HoTen" class="form-control bg-light border-start-0" placeholder="Ví dụ: Nguyễn Văn A" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted small">TÊN ĐĂNG NHẬP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input type="text" name="TenDangNhap" class="form-control bg-light border-start-0" placeholder="username" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-muted small">EMAIL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input type="email" name="Email" class="form-control bg-light border-start-0" placeholder="name@example.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted small">MẬT KHẨU</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                                <input type="password" name="MatKhau" class="form-control bg-light border-start-0" placeholder="Ít nhất 6 ký tự" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted small">NHẬP LẠI MẬT KHẨU</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-check-circle text-muted"></i></span>
+                                <input type="password" name="XacNhanMatKhau" class="form-control bg-light border-start-0" placeholder="••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 form-check small">
+                            <input type="checkbox" class="form-check-input" id="agreeTerm" required>
+                            <label class="form-check-label text-muted" for="agreeTerm">
+                                Tôi đồng ý với <a href="#" class="text-decoration-none text-brand-teal fw-bold">Điều khoản dịch vụ</a> của M-GYM
+                            </label>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-neon btn-lg shadow-sm fw-bold text-dark">ĐĂNG KÝ THÀNH VIÊN</button>
+                        </div>
+
+                        <div class="text-center text-muted small">
+                            Đã có tài khoản? 
+                            <a href="@Url.Action("Login", "Account")" class="text-decoration-none fw-bold" style="color: var(--brand-teal);">
+                                Đăng nhập tại đây
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

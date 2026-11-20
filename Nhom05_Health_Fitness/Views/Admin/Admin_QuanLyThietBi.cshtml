@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Admin_QuanLyThietBi";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@using Nhom05_Health_Fitness.Models;
+@model  List<ThietBiTap>
+
+
+
+
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>🏋️ Quản Lý Thiết Bị Tập Luyện</h2>
+        <p>Kiểm tra và cập nhật trạng thái hoạt động/bảo trì của các thiết bị.</p>
+    </div>
+</div>
+
+<div class="table-container" style="margin-top: 20px;">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th style="width: 15%;">MÃ THIẾT BỊ</th>
+                <th style="width: 40%;">TÊN THIẾT BỊ</th>
+                <th style="width: 15%;">TRẠNG THÁI</th>
+                <th style="width: 15%;">NGÀY BẢO TRÌ GẦN NHẤT</th>
+                <th style="width: 15%; text-align: right;">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ThietBiID</td>
+                    <td>@item.TenThietBi</td>
+                    <td>
+                        @if (item.TrangThai.Trim() == "Hoạt động")
+                        {
+                            <span style="color:var(--accent-green); font-weight: bold;">@item.TrangThai</span>
+                        }
+                        else
+                        {
+                            <span style="color:var(--accent-yellow); font-weight: bold;">@item.TrangThai</span>
+                        }
+                    </td>
+                    <td>@(item.NgayBaoTri.HasValue ? item.NgayBaoTri.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                    <td>
+                        <div class="action-buttons">
+
+                            @* 1. NÚT XEM CHI TIẾT (MỚI THÊM) *@
+                            <a href="@Url.Action("Admin_ChiTietThietBi", "Admin", new { id = item.ThietBiID.Trim() })"
+                               class="btn-action" title="Xem Chi tiết" style="background-color: #3B3B5B; color: #fff;">
+                                <i class="fas fa-eye"></i>
+                            </a>
+
+                            @* 2. NÚT THAO TÁC TRẠNG THÁI *@
+                            @if (item.TrangThai.Trim() == "Hoạt động")
+                            {
+                                // Nút chuyển sang BẢO TRÌ (Icon cờ lê/wrench màu vàng)
+                                using (Html.BeginForm("Admin_BaoTri", "Admin", new { id = item.ThietBiID.Trim() }, FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action" title="Chuyển sang Bảo trì" style="background-color: #FFC700; color: var(--bg-dark-primary);">
+                                        <i class="fas fa-tools"></i>
+                                    </button>
+                                }
+                            }
+                            else // Đang Bảo trì
+                            {
+                                // Nút chuyển sang HOẠT ĐỘNG (Icon checkmark màu xanh lá)
+                                using (Html.BeginForm("Admin_HoanThanhBaoTri", "Admin", new { id = item.ThietBiID.Trim() }, FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action" title="Hoàn thành Bảo trì" style="background-color: #50CD89; color: var(--bg-dark-primary);">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

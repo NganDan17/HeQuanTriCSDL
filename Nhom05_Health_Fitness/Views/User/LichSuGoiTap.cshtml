@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.LichSuGoiViewModel>
+
+@{
+    ViewBag.Title = "Lịch sử gói tập";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">
+            <i class="fas fa-history me-2"></i>Lịch sử đăng ký
+        </h2>
+        <p class="text-muted">Quản lý các gói dịch vụ và trạng thái thanh toán của bạn</p>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow border-0 rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="text-white" style="background-color: var(--brand-teal);">
+                        <tr>
+                            <th class="py-3 ps-4">Tên Gói Tập</th>
+                            <th class="py-3 text-center">Ngày Đăng Ký</th>
+                            <th class="py-3 text-center">Ngày Hết Hạn</th>
+                            <th class="py-3 text-end">Giá Tiền</th>
+                            <th class="py-3 text-center">Trạng Thái</th>
+                            <th class="py-3 text-center pe-4">Thanh Toán</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        @foreach (var item in Model)
+                        {
+                            // Logic kiểm tra hạn
+                            bool conHan = item.NgayHetHan.HasValue && item.NgayHetHan.Value >= DateTime.Now;
+
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark" style="font-size: 1.1rem;">@item.TenGoi</div>
+                                    @if (conHan)
+                                    {
+                                        <small class="text-success"><i class="fas fa-check-circle me-1"></i>Đang sử dụng</small>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">Đã kết thúc</small>
+                                    }
+                                </td>
+                                <td class="text-center text-muted">
+                                    @string.Format("{0:dd/MM/yyyy}", item.NgayDangKy)
+                                </td>
+                                <td class="text-center fw-bold" style="color: var(--brand-teal);">
+                                    @string.Format("{0:dd/MM/yyyy}", item.NgayHetHan)
+                                </td>
+                                <td class="text-end fw-bold text-danger">
+                                    @string.Format("{0:N0}", item.GiaTien) ₫
+                                </td>
+                                <td class="text-center">
+                                    @if (conHan)
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill border border-success">
+                                            Còn hạn
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill border">
+                                            Hết hạn
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-center pe-4">
+                                    @if (item.DaThanhToan)
+                                    {
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 mb-1">
+                                                Đã thanh toán
+                                            </span>
+                                            @if (item.NgayThanhToan.HasValue)
+                                            {
+                                                <small class="text-muted" style="font-size: 0.75rem;">
+                                                    @item.NgayThanhToan.Value.ToString("dd/MM/yyyy")
+                                                </small>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark px-3 py-2">
+                                            Chờ thanh toán
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 text-end text-muted small">
+            <i class="fas fa-info-circle me-1"></i> Nếu có thắc mắc về thanh toán, vui lòng liên hệ hotline 1900 123 456.
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="mb-4 opacity-25">
+                <i class="fas fa-receipt fa-5x text-muted"></i>
+            </div>
+            <h4 class="fw-bold text-muted">Bạn chưa đăng ký gói tập nào</h4>
+            <p class="text-muted mb-4">Hãy chọn một gói tập phù hợp để bắt đầu rèn luyện sức khỏe ngay hôm nay!</p>
+
+            <a href="@Url.Action("TatCaGoiTap", "User")" class="btn btn-neon fw-bold px-5 shadow-sm text-dark">
+                <i class="fas fa-shopping-cart me-2"></i>Xem các gói tập
+            </a>
+        </div>
+    }
+</div>

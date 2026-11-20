@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.LoiNhac>
+
+@{
+    int count = Model != null ? Model.Count() : 0;
+}
+
+<li class="nav-item dropdown me-3">
+    <a class="nav-link dropdown-toggle position-relative" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-bell fa-lg text-white-50"></i>
+
+        @if (count > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.6rem;">
+                @count
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        }
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+        <li><h6 class="dropdown-header text-uppercase fw-bold text-brand-teal">Thông báo mới nhất</h6></li>
+        <li><hr class="dropdown-divider"></li>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <li>
+                    <a class="dropdown-item py-2" href="#">
+                        <div class="d-flex align-items-start">
+                            <div class="me-2 mt-1">
+                                <i class="fas fa-info-circle text-info"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-wrap small" style="line-height: 1.4;">@item.NoiDung</p>
+                                <small class="text-muted" style="font-size: 0.7rem;">
+                                    @(item.NgayNhac.HasValue ? item.NgayNhac.Value.ToString("dd/MM/yyyy") : "")
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+            }
+            <li><a class="dropdown-item text-center small text-muted" href="#">Xem tất cả</a></li>
+        }
+        else
+        {
+            <li class="p-3 text-center text-muted small">
+                <i class="fas fa-bell-slash mb-2"></i><br>
+                Hiện chưa có thông báo nào
+            </li>
+        }
+    </ul>
+</li>

@@ -1,0 +1,161 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap');
+
+:root {
+    /* --- BẢNG MÀU MỚI TỪ HÌNH ẢNH --- */
+    /* Thay thế màu cũ bằng mã màu mới */
+    --brand-teal: #0C2659; /* Màu xanh Navy đậm (Thay cho xanh cổ vịt cũ) */
+    --brand-neon: #F2C230; /* Màu Vàng (Thay cho màu Neon cũ) */
+    /* Các màu phụ lấy từ palette (Dùng cho hover/gradient) */
+    --brand-orange: #F2A03D;
+    --brand-coral: #F27B50;
+    --brand-red: #D96459;
+    --brand-light: #FDFBF7; /* Màu trắng kem ấm hơn một chút */
+    --brand-grey: #64748B; /* Màu xám xanh hiện đại */
+}
+
+body {
+    font-family: 'Sora', sans-serif;
+    background-color: var(--brand-light);
+    color: var(--brand-teal);
+}
+
+/* --- Tùy chỉnh Navbar --- */
+.bg-brand-teal {
+    background-color: var(--brand-teal) !important;
+}
+
+.navbar-custom {
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    /* Thêm hiệu ứng viền dưới màu cam/vàng */
+    border-bottom: 3px solid var(--brand-orange);
+}
+
+.nav-link {
+    color: rgba(255,255,255, 0.8) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+    .nav-link:hover, .nav-link.active {
+        color: var(--brand-neon) !important; /* Hover ra màu vàng */
+    }
+
+/* --- Tùy chỉnh Nút bấm (Button) --- */
+.btn-neon {
+    background-color: var(--brand-neon); /* Nền vàng */
+    color: var(--brand-teal); /* Chữ xanh đậm */
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 10px 30px;
+    border: 2px solid var(--brand-neon);
+    transition: all 0.3s ease;
+}
+
+    .btn-neon:hover {
+        /* Hiệu ứng chuyển màu giống hoàng hôn khi hover */
+        background-color: var(--brand-coral); /* Chuyển sang màu cam đỏ */
+        border-color: var(--brand-coral);
+        color: white; /* Chữ chuyển thành trắng */
+        box-shadow: 0 5px 15px rgba(242, 123, 80, 0.4);
+    }
+
+.btn-outline-teal {
+    border: 2px solid var(--brand-teal);
+    color: var(--brand-teal);
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 10px 30px;
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-teal:hover {
+        background-color: var(--brand-teal);
+        color: var(--brand-neon); /* Nền xanh, chữ vàng */
+    }
+
+/* --- Tùy chỉnh Card --- */
+.card-custom {
+    background-color: white;
+    border: 1px solid rgba(12, 38, 89, 0.08); /* Viền mờ màu xanh navy */
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(12, 38, 89, 0.15);
+        /* Viền dưới khi hover chuyển sang màu Gradient cam đỏ */
+        border-bottom: 4px solid var(--brand-coral);
+    }
+
+/* --- Tiêu đề section --- */
+.section-title {
+    color: var(--brand-teal);
+    font-weight: 800;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        /* Gạch chân màu vàng */
+        background-color: var(--brand-neon);
+        margin: 10px auto 0;
+        border-radius: 2px;
+    }
+
+/* --- Bổ sung: Class Text màu mới (Để dùng trong HTML nếu cần) --- */
+.text-brand-neon {
+    color: var(--brand-neon) !important;
+}
+
+.text-brand-orange {
+    color: var(--brand-orange) !important;
+}
+
+.text-brand-coral {
+    color: var(--brand-coral) !important;
+}
+
+/* --- Bổ sung: Gradient Background (Nếu muốn dùng cho Banner) --- */
+.bg-sunset-gradient {
+    background: linear-gradient(135deg, var(--brand-teal) 0%, var(--brand-red) 100%);
+}
+/* Hiệu ứng Focus cho Input */
+.form-control:focus {
+    border-color: var(--brand-neon);
+    box-shadow: 0 0 0 0.25rem rgba(242, 194, 48, 0.25); /* Màu vàng nhạt */
+    background-color: white !important;
+}
+
+/* Icon bên trong Input group */
+.input-group-text {
+    border-color: #ced4da; /* Màu viền mặc định Bootstrap */
+}
+
+    /* Khi input focus thì icon bên cạnh cũng đổi màu viền */
+    .form-control:focus + .input-group-text,
+    .input-group-text:has(+ .form-control:focus) {
+        border-color: var(--brand-neon);
+    }
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Sửa lại một chút màu nút "Chi tiết" cho đồng bộ */
+.btn-outline-secondary:hover {
+    background-color: var(--brand-teal);
+    color: var(--brand-neon);
+    border-color: var(--brand-teal);
+}

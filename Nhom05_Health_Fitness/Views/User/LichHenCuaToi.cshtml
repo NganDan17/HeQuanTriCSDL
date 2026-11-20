@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.LichHenViewModel>
+
+@{
+    ViewBag.Title = "Lịch tập của tôi";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">
+            <i class="fas fa-calendar-check me-2"></i>Lịch tập với HLV
+        </h2>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow border-0 rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-brand-teal text-white">
+                        <tr>
+                            <th class="py-3 ps-4">Thời gian</th>
+                            <th class="py-3">Huấn luyện viên</th>
+                            <th class="py-3">Nội dung tập</th>
+                            <th class="py-3 text-center">Trạng thái</th>
+                            <th class="py-3 text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            bool isUpcoming = item.Ngay >= DateTime.Now.Date && item.TrangThai != "Đã hủy";
+
+                            <tr>
+                                <td class="ps-4 fw-bold">
+                                    @string.Format("{0:dd/MM/yyyy}", item.Ngay)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user-tie text-muted"></i>
+                                        </div>
+                                        <span class="fw-bold text-brand-teal">@item.TenHLV</span>
+                                    </div>
+                                </td>
+                                <td>@item.NoiDung</td>
+                                <td class="text-center">
+                                    @if (item.TrangThai == "Đã hủy")
+                                    {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger px-3">Đã hủy</span>
+                                    }
+                                    else if (item.TrangThai == "Hoàn thành")
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3">Hoàn thành</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3">Sắp diễn ra</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (isUpcoming)
+                                    {
+                                        <button class="btn btn-outline-danger btn-sm rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#modalHuyLich"
+                                                onclick="setHuyLich('@item.LichID')">
+                                            <i class="fas fa-times me-1"></i> Hủy
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-times fa-4x text-muted opacity-50 mb-3"></i>
+            <h4 class="text-muted">Bạn chưa có lịch hẹn nào</h4>
+            <a href="@Url.Action("DanhSachHLV", "User")" class="btn btn-neon mt-3 text-dark fw-bold">
+                Đặt lịch ngay
+            </a>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="modalHuyLich" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="@Url.Action("HuyLich", "User")" method="post">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Xác nhận hủy lịch</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn hủy buổi tập này không?</p>
+                    <input type="hidden" name="lichID" id="hiddenLichID" />
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Lý do hủy (Tùy chọn)</label>
+                        <input type="text" name="lyDo" class="form-control" placeholder="VD: Bận việc gia đình...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger">Xác nhận Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setHuyLich(id) {
+        document.getElementById('hiddenLichID').value = id;
+    }
+</script>

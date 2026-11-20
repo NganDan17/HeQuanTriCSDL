@@ -1,0 +1,125 @@
+﻿@model Nhom05_Health_Fitness.Models.BuoiTap
+@using Nhom05_Health_Fitness.Models;
+@{
+    ViewBag.Title = "Chi tiết buổi tập";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var listDaTap = ViewBag.ListDaTap as IEnumerable<ChiTietBaiTapDisplay>;
+}
+
+<div class="container py-5">
+    <div class="card border-0 shadow-sm mb-4 bg-brand-teal text-white">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="fw-bold mb-1">BUỔI TẬP NGÀY @Model.NgayTap.Value.ToString("dd/MM/yyyy")</h4>
+                <p class="mb-0 opacity-75"><i class="fas fa-clock me-1"></i> @Model.ThoiLuong_phut phút | <i class="fas fa-comment-alt me-1"></i> @(Model.GhiChu ?? "Không có ghi chú")</p>
+            </div>
+            <a href="@Url.Action("NhatKy", "User", new { ngayXem = Model.NgayTap })" class="btn btn-outline-light btn-sm rounded-pill">
+                Xem Nhật Ký <i class="fas fa-book ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow border-0 rounded-4 h-100">
+                <div class="card-header bg-white fw-bold text-brand-teal border-bottom-0 pt-3">
+                    <i class="fas fa-plus-circle me-2"></i>Thêm bài tập
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {<div class="alert alert-success py-2 small">@TempData["Success"]</div>}
+                    @if (TempData["Error"] != null)
+                    {<div class="alert alert-danger py-2 small">@TempData["Error"]</div>}
+
+                    <form action="@Url.Action("ThemBaiTapVaoBuoi", "User")" method="post">
+                        <input type="hidden" name="buoiTapID" value="@Model.BuoiTapID" />
+
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-bold">CHỌN BÀI TẬP</label>
+                            @Html.DropDownList("baiTapID", (SelectList)ViewBag.DanhSachBaiTap, "--- Chọn bài tập ---", new { @class = "form-select", required = "required" })
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small text-muted fw-bold">SỐ HIỆP (SETS)</label>
+                                <input type="number" name="soHiep" class="form-control" value="3" min="1" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small text-muted fw-bold">SỐ LẦN (REPS)</label>
+                                <input type="number" name="soLan" class="form-control" value="10" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-bold">MỨC TẠ (KG) <small class="fw-normal">(0 nếu bodyweight)</small></label>
+                            <input type="number" name="khoiLuong" class="form-control" value="0" min="0" step="0.5">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small text-muted fw-bold">THIẾT BỊ (TÙY CHỌN)</label>
+                            @Html.DropDownList("thietBiID", (SelectList)ViewBag.DanhSachThietBi, "--- Không dùng ---", new { @class = "form-select" })
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-neon fw-bold text-dark">THÊM VÀO LIST</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow border-0 rounded-4 h-100">
+                <div class="card-header bg-white fw-bold text-brand-teal border-bottom-0 pt-3">
+                    <i class="fas fa-list-ol me-2"></i>Danh sách bài tập hôm nay
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-muted small">
+                            <tr>
+                                <th class="ps-4">Tên bài tập</th>
+                                <th class="text-center">Sets x Reps</th>
+                                <th class="text-center">Mức tạ</th>
+                                <th>Thiết bị</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (listDaTap != null && listDaTap.Count() > 0)
+                            {
+                                foreach (var item in listDaTap)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-dark">@item.TenBai</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-secondary rounded-pill">@item.SoHiep x @item.SoLan</span>
+                                        </td>
+                                        <td class="text-center text-danger fw-bold">
+                                            @(item.KhoiLuong > 0 ? item.KhoiLuong + " kg" : "-")
+                                        </td>
+                                        <td class="text-muted small">
+                                            @(item.ThietBi ?? "None")
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="fas fa-dumbbell fa-2x mb-2 opacity-50"></i><br>
+                                        Chưa có bài tập nào. Hãy thêm ở bên trái!
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white border-0 py-3 text-end">
+                    <a href="@Url.Action("NhatKy", "User")" class="btn btn-outline-success fw-bold">
+                        <i class="fas fa-check me-2"></i>HOÀN THÀNH BUỔI TẬP
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

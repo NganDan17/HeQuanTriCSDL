@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.HuanLuyenVien>
+
+@{
+    ViewBag.Title = "Đội ngũ Huấn luyện viên";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase" style="color: var(--brand-teal);">CHUYÊN GIA THỂ HÌNH</h2>
+        <p class="text-muted">Đội ngũ HLV giàu kinh nghiệm sẵn sàng đồng hành cùng bạn</p>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    <div class="card shadow-sm mb-5 border-0">
+        <div class="card-body bg-light rounded">
+            <form action="@Url.Action("DanhSachHLV", "User")" method="get" class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted">Tìm theo tên</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="searchString" class="form-control border-start-0 ps-0"
+                               placeholder="Nhập tên HLV..."
+                               value="@ViewBag.CurrentFilter">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted">Sắp xếp theo</label>
+                    <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                        <option value="">Tên: A -> Z</option>
+                        <option value="name_desc" @(ViewBag.CurrentSort == "name_desc" ? "selected" : "")>Tên: Z -> A</option>
+                        <option value="exp_desc" @(ViewBag.CurrentSort == "exp_desc" ? "selected" : "")>Kinh nghiệm: Cao nhất</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-neon w-100 fw-bold text-dark">Lọc ngay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-up text-center">
+                        <div class="card-body p-4">
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="https://i.pravatar.cc/150?u=@item.HLV_ID"
+                                     class="rounded-circle border border-3 border-light shadow-sm"
+                                     style="width: 120px; height: 120px; object-fit: cover;">
+
+                                <span class="position-absolute bottom-0 end-0 badge rounded-pill bg-brand-teal border border-white">
+                                    @item.SoNamKinhNghiem năm KN
+                                </span>
+                            </div>
+
+                            <h5 class="fw-bold mb-1" style="color: var(--brand-teal);">@item.HoTen</h5>
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-phone-alt me-1 text-success"></i> @item.SoDienThoai
+                            </p>
+
+                            <div class="d-grid gap-2">
+
+
+                                <button type="button"
+                                        class="btn btn-neon btn-sm fw-bold text-dark"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalDatLich"
+                                        data-id="@item.HLV_ID"
+                                        data-name="@item.HoTen">
+                                    Đặt lịch tập
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
+                <p class="lead text-muted">Không tìm thấy huấn luyện viên nào.</p>
+                <a href="@Url.Action("DanhSachHLV", "User")" class="btn btn-link">Xem tất cả</a>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatLich" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-brand-teal text-white">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-calendar-check me-2" style="color: var(--brand-neon);"></i>ĐẶT LỊCH TẬP
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="@Url.Action("DatLichTap", "User")" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body p-4">
+                    <input type="hidden" name="hlvID" id="inputHLV_ID" />
+
+                    <div class="alert alert-light border d-flex align-items-center mb-4">
+                        <div class="rounded-circle bg-brand-teal text-white p-3 me-3">
+                            <i class="fas fa-user-tie fa-lg"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted text-uppercase fw-bold">Huấn luyện viên</small>
+                            <h5 class="fw-bold mb-0 text-brand-teal" id="textTenHLV">...</h5>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small">CHỌN NGÀY TẬP</label>
+                        <input type="date" name="ngayTap" class="form-control form-control-lg" required
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small">NỘI DUNG BUỔI TẬP</label>
+                        <textarea name="noiDung" class="form-control" rows="3"
+                                  placeholder="Ví dụ: Tập chân, Cardio, Tư vấn dinh dưỡng..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light border-top-0">
+                    <button type="button" class="btn btn-outline-secondary border-0 fw-bold" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-neon fw-bold px-4 text-dark">XÁC NHẬN ĐẶT LỊCH</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modalDatLich = document.getElementById('modalDatLich');
+    modalDatLich.addEventListener('show.bs.modal', function (event) {
+        // 1. Tìm nút vừa bấm
+        var button = event.relatedTarget;
+
+        // 2. Lấy dữ liệu từ data-attribute của nút
+        var id = button.getAttribute('data-id');
+        var name = button.getAttribute('data-name');
+
+        // 3. Gán vào các ô trong Modal
+        modalDatLich.querySelector('#inputHLV_ID').value = id;
+        modalDatLich.querySelector('#textTenHLV').textContent = name;
+    });
+</script>
+
+
+<style>
+    .hover-up:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+    }
+
+    .bg-brand-teal {
+        background-color: var(--brand-teal) !important;
+        color: white;
+    }
+</style>

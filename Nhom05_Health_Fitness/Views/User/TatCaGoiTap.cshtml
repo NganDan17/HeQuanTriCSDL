@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Nhom05_Health_Fitness.Models.GoiTap>
+
+@{
+    ViewBag.Title = "Danh sách Gói tập";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold" style="color: var(--brand-teal);">KHÁM PHÁ CÁC GÓI TẬP</h2>
+        <p class="text-muted">Tìm kiếm giải pháp luyện tập phù hợp với túi tiền của bạn</p>
+        <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+    </div>
+
+    <div class="card shadow-sm mb-5 border-0">
+        <div class="card-body bg-light rounded">
+            <form action="@Url.Action("TatCaGoiTap", "User")" method="get" class="row g-3 align-items-end">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted">Tên gói tập</label>
+                    <input type="text" name="searchString" class="form-control"
+                           placeholder="Ví dụ: Yoga, 1 tháng..."
+                           value="@ViewBag.CurrentFilter">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted">Giá từ</label>
+                    <input type="number" name="minPrice" class="form-control"
+                           placeholder="0"
+                           value="@ViewBag.MinPrice">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted">Đến</label>
+                    <input type="number" name="maxPrice" class="form-control"
+                           placeholder="10,000,000"
+                           value="@ViewBag.MaxPrice">
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-neon w-100 fw-bold text-dark">
+                        <i class="fas fa-filter me-1"></i> Lọc ngay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-up position-relative">
+                        <div class="position-absolute top-0 start-0 p-2 bg-brand-teal text-white small fw-bold rounded-end">
+                            @item.ThoiHan_thang Tháng
+                        </div>
+
+                        <div class="card-body text-center p-4 d-flex flex-column">
+                            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle bg-light"
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-dumbbell fa-lg" style="color: var(--brand-teal);"></i>
+                            </div>
+
+                            <h5 class="card-title fw-bold text-uppercase" style="color: var(--brand-teal);">
+                                @item.TenGoi
+                            </h5>
+
+                            <div class="my-2">
+                                <h3 class="fw-bold text-danger">
+                                    @string.Format("{0:N0}", item.GiaTien) <small class="fs-6 text-muted">VND</small>
+                                </h3>
+                            </div>
+
+                            <p class="card-text text-muted small flex-grow-1">
+                                Trải nghiệm không giới hạn với đầy đủ tiện ích chuẩn 5 sao.
+                            </p>
+
+                            <button type="button"
+                                    class="btn btn-outline-dark w-100 mt-3"
+                                    style="border-color: var(--brand-teal); color: var(--brand-teal);"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDangKyGoi"
+                                    data-id="@item.GoiTapID"
+                                    data-ten="@item.TenGoi"
+                                    data-gia="@item.GiaTien">
+                                Đăng ký
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <p class="lead text-muted">Không tìm thấy gói tập nào phù hợp với tiêu chí của bạn.</p>
+                <a href="@Url.Action("TatCaGoiTap", "User")" class="btn btn-link">Xóa bộ lọc</a>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="modalDangKyGoi" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="@Url.Action("DangKyGoiTap", "User")" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-brand-teal text-white">
+                    <h5 class="modal-title fw-bold">XÁC NHẬN ĐĂNG KÝ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-shopping-cart fa-3x mb-3" style="color: var(--brand-teal);"></i>
+                        <p>Bạn đang chọn đăng ký gói tập:</p>
+                        <h4 class="fw-bold text-uppercase" id="modalTenGoi" style="color: var(--brand-teal);">...</h4>
+                        <h3 class="fw-bold text-danger mt-2" id="modalGiaGoi">0 đ</h3>
+                    </div>
+
+                    <div class="alert alert-light border small text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Hệ thống sẽ ghi nhận và kích hoạt gói tập ngay sau khi xác nhận.
+                    </div>
+
+                    <input type="hidden" name="idGoi" id="hiddenIdGoi" />
+                    <input type="hidden" name="giaTien" id="hiddenGiaTien" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-neon fw-bold">Xác nhận thanh toán</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modalDangKy = document.getElementById('modalDangKyGoi');
+    modalDangKy.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        var id = button.getAttribute('data-id');
+        var ten = button.getAttribute('data-ten');
+        var gia = button.getAttribute('data-gia');
+        var giaHienThi = parseFloat(gia).toLocaleString('vi-VN') + ' VND';
+
+        var modalTitle = modalDangKy.querySelector('#modalTenGoi');
+        var modalPrice = modalDangKy.querySelector('#modalGiaGoi');
+        var hiddenId = modalDangKy.querySelector('#hiddenIdGoi');
+        var hiddenGia = modalDangKy.querySelector('#hiddenGiaTien');
+
+        modalTitle.textContent = ten;
+        modalPrice.textContent = giaHienThi;
+        hiddenId.value = id;
+        hiddenGia.value = gia;
+    });
+</script>
+
+<style>
+    .hover-up:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>

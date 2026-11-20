@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Admin_ChiTietThietBi";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    // Ép kiểu dynamic (hoặc List<dynamic>) để đọc Anonymous Type từ ViewBag
+    var lichSuSuDung = ViewBag.LichSuSuDung as List<dynamic>;
+}
+
+
+@using Nhom05_Health_Fitness.Models;
+@model ThietBiTap
+<div class="dashboard-header">
+    <div class="title-group">
+        <h2>🛠️ Chi Tiết Thiết Bị: @Model.TenThietBi</h2>
+        <p>Thông tin chi tiết và lịch sử sử dụng của thiết bị.</p>
+    </div>
+    @Html.ActionLink("Quay lại Danh sách", "Admin_QuanLyThietBi", null, new { @class = "btn-refresh", style = "background-color: var(--text-secondary); color: var(--bg-dark-primary);" })
+</div>
+
+<div class="detail-card">
+    <div class="detail-header">
+        @* Icon của Thiết bị *@
+        <div class="detail-avatar" style="background-color: var(--accent-grey); font-size: 2rem;">
+            <i class="fas fa-dumbbell"></i>
+        </div>
+        <h1>@Model.TenThietBi</h1>
+        <p class="detail-username">Mã: @Model.ThietBiID</p>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <div class="detail-row">
+            <span class="detail-label">Trạng thái</span>
+            <span class="detail-value" style="color:@(Model.TrangThai == "Hoạt động" ? "var(--accent-green)" : "var(--accent-yellow)")">
+                @Model.TrangThai
+            </span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Ngày bảo trì gần nhất</span>
+            <span class="detail-value">@(Model.NgayBaoTri.HasValue ? Model.NgayBaoTri.Value.ToString("dd/MM/yyyy") : "Chưa từng bảo trì")</span>
+        </div>
+
+        <div class="detail-row" style="border-bottom: none;">
+            <span class="detail-label">Hành động nhanh</span>
+            <div class="detail-value action-buttons">
+                @if (Model.TrangThai.Trim() == "Hoạt động")
+                {
+                    // Form Chuyển sang Bảo trì
+                    using (Html.BeginForm("Admin_BaoTri", "Admin", new { id = Model.ThietBiID.Trim() }, FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                                title="Chuyển sang Bảo trì"
+                                style="background-color: #FFC700; color: var(--bg-dark-primary);
+                               padding: 8px 15px; border-radius: 8px; border: none; font-weight: bold;
+                               cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-tools"></i> Chuyển Bảo trì
+                        </button>
+                    }
+                }
+                else
+                {
+                    // Form Hoàn thành Bảo trì
+                    using (Html.BeginForm("Admin_HoanThanhBaoTri", "Admin", new { id = Model.ThietBiID.Trim() }, FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                                title="Hoàn thành Bảo trì"
+                                style="background-color: #50CD89; color: var(--bg-dark-primary);
+                               padding: 8px 15px; border-radius: 8px; border: none; font-weight: bold;
+                               cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-check"></i> Hoàn thành
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <h4 style="color: var(--text-primary); margin-top: 30px; border-top: 1px solid #2d3748; padding-top: 20px;">
+        Lịch sử sử dụng gần nhất (@(lichSuSuDung?.Count ?? 0) buổi)
+    </h4>
+
+    @if (lichSuSuDung != null && lichSuSuDung.Any())
+    {
+        <ul style="list-style: none; padding: 0;">
+            @foreach (var ls in lichSuSuDung)
+            {
+                <li style="background-color: var(--bg-dark-tertiary); padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                    <div>
+                        <span style="font-weight: bold; color: var(--accent-gold);">@Convert.ToDateTime(ls.NgayTap).ToString("dd/MM/yyyy")</span>
+                        - Bài tập: @ls.TenBaiTap
+                    </div>
+                    <div style="color: var(--text-secondary);">
+                        (User: @ls.NguoiDungID)
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p style="color: var(--text-secondary);">Chưa có dữ liệu sử dụng gần đây.</p>
+    }
+</div>

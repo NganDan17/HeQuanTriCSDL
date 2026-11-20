@@ -1,0 +1,355 @@
+﻿@using Nhom05_Health_Fitness.Models
+@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+    // 1. KHAI BÁO BIẾN DÙNG CHUNG
+    var topGoiTap = ViewBag.TopGoiTap as IEnumerable<dynamic>;
+
+    // Kiểm tra trạng thái đăng nhập
+    bool isLogged = Session["NguoiDungID"] != null;
+    string loginUrl = Url.Action("Login", "Account");
+}
+
+<div class="position-relative d-flex align-items-center justify-content-center"
+     style="background-color: var(--brand-teal); min-height: 80vh; overflow: hidden;">
+
+    <div style="position: absolute; top:0; left:0; width:100%; height:100%;
+                background: url('https://citigym.asia/uploads/banner-1.jpg') center/cover;
+                opacity: 0.2; mix-blend-mode: luminosity;"></div>
+
+    <div class="container position-relative text-center z-index-2">
+        <h5 class="fw-bold mb-3" style="color: var(--brand-grey); letter-spacing: 2px;">WELCOME TO THE FUTURE</h5>
+        <h1 class="display-3 fw-bolder text-white mb-4">
+            KHỞI ĐẦU SỨC MẠNH<br>
+            <span style="color: var(--brand-neon);">BỨT PHÁ GIỚI HẠN</span>
+        </h1>
+        <p class="lead text-white opacity-75 mb-5 mx-auto" style="max-width: 600px;">
+            Trải nghiệm không gian tập luyện chuẩn 5 sao với gam màu năng động, khơi dậy nguồn năng lượng trong bạn.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="@(isLogged ? "#goi-tap-section" : loginUrl)"
+               class="btn btn-neon btn-lg shadow text-dark fw-bold">Đăng ký ngay</a>
+
+            <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-4">Tìm hiểu thêm</a>
+        </div>
+    </div>
+</div>
+
+<div class="py-4" style="background-color: var(--brand-neon);">
+    <div class="container">
+        <div class="row text-center align-items-center" style="color: var(--brand-teal); font-weight: 700;">
+            <div class="col-md-3"><i class="fas fa-check-circle me-2"></i> THIẾT BỊ HIỆN ĐẠI</div>
+            <div class="col-md-3"><i class="fas fa-check-circle me-2"></i> HLV CHUYÊN NGHIỆP</div>
+            <div class="col-md-3"><i class="fas fa-check-circle me-2"></i> KHÔNG GIAN XANH</div>
+            <div class="col-md-3"><i class="fas fa-check-circle me-2"></i> HỖ TRỢ 24/7</div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5" style="background-color: var(--brand-light);">
+    <div class="container mt-4">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--brand-teal);">DỊCH VỤ ĐẲNG CẤP</h2>
+            <p style="color: var(--brand-grey);">Chọn bộ môn phù hợp với cá tính của bạn</p>
+            <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a href="@Url.Action("TatCaGoiTap", "User", new { searchString = "Kickboxing" })" class="text-decoration-none text-dark">
+                    <div class="card card-custom h-100 border-0 p-3 shadow-sm hover-up">
+                        <div class="card-body text-center">
+                            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: var(--brand-teal);">
+                                <i class="fas fa-running fa-2x" style="color: var(--brand-neon);"></i>
+                            </div>
+                            <h4 class="fw-bold mt-3" style="color: var(--brand-teal);">CARDIO ZONE</h4>
+                            <p class="text-muted mt-2 small">Đốt cháy calo hiệu quả với các lớp Kickboxing và máy chạy bộ.</p>
+                            <span class="btn btn-outline-secondary btn-sm mt-3">Xem chi tiết</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="@Url.Action("TatCaGoiTap", "User", new { searchString = "PT" })" class="text-decoration-none text-dark">
+                    <div class="card card-custom h-100 border-0 p-3 shadow-sm hover-up">
+                        <div class="card-body text-center">
+                            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: var(--brand-teal);">
+                                <i class="fas fa-dumbbell fa-2x" style="color: var(--brand-neon);"></i>
+                            </div>
+                            <h4 class="fw-bold mt-3" style="color: var(--brand-teal);">BODY BUILDING</h4>
+                            <p class="text-muted mt-2 small">Khu vực tạ Free-weight và Huấn luyện viên cá nhân chuyên nghiệp.</p>
+                            <span class="btn btn-outline-secondary btn-sm mt-3">Xem chi tiết</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="@Url.Action("TatCaGoiTap", "User", new { searchString = "Yoga" })" class="text-decoration-none text-dark">
+                    <div class="card card-custom h-100 border-0 p-3 shadow-sm hover-up">
+                        <div class="card-body text-center">
+                            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: var(--brand-teal);">
+                                <i class="fas fa-spa fa-2x" style="color: var(--brand-neon);"></i>
+                            </div>
+                            <h4 class="fw-bold mt-3" style="color: var(--brand-teal);">YOGA & RELAX</h4>
+                            <p class="text-muted mt-2 small">Cân bằng tâm trí, thư giãn cơ bắp sau giờ tập với lớp Yoga.</p>
+                            <span class="btn btn-outline-secondary btn-sm mt-3">Xem chi tiết</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="goi-tap-section" class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--brand-teal);">GÓI TẬP HOT NHẤT</h2>
+            <p style="color: var(--brand-grey);">Được hàng ngàn hội viên tin tưởng lựa chọn</p>
+            <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            @if (topGoiTap != null)
+            {
+                foreach (var item in topGoiTap)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card h-100 border-0 shadow-lg position-relative overflow-hidden hover-scale" style="transition: all 0.3s ease;">
+                            <div class="position-absolute top-0 end-0 px-3 py-1 fw-bold small text-dark"
+                                 style="background-color: var(--brand-neon); border-bottom-left-radius: 10px;">
+                                <i class="fas fa-fire me-1"></i> HOT
+                            </div>
+
+                            <div class="card-body text-center p-4 d-flex flex-column">
+                                <h5 class="card-title fw-bold text-uppercase mb-3" style="color: var(--brand-teal);">@item.TenGoi</h5>
+                                <div class="my-3 py-3 rounded" style="background-color: #f8f9fa;">
+                                    <h3 class="fw-bold mb-0" style="color: #d63384;">
+                                        @string.Format("{0:N0}", item.GiaTien) <small style="font-size: 0.6em">VND</small>
+                                    </h3>
+                                </div>
+                                <ul class="list-unstyled text-start small text-muted mb-4 flex-grow-1 px-2">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Không giới hạn thời gian</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sử dụng mọi thiết bị</li>
+                                    <li class="mb-2"><i class="fas fa-user-check text-primary me-2"></i>@item.SoLuotDangKy người đã chọn</li>
+                                </ul>
+
+                                @if (isLogged)
+                                {
+                                    <button type="button" class="btn btn-outline-dark fw-bold w-100 mt-auto"
+                                            style="border-color: var(--brand-teal); color: var(--brand-teal);"
+                                            data-bs-toggle="modal" data-bs-target="#modalDangKyGoi"
+                                            data-id="@item.GoiTapID" data-ten="@item.TenGoi" data-gia="@item.GiaTien">
+                                        ĐĂNG KÝ NGAY
+                                    </button>
+                                }
+                                else
+                                {
+                                    <a href="@loginUrl" class="btn btn-outline-dark fw-bold w-100 mt-auto"
+                                       style="border-color: var(--brand-teal); color: var(--brand-teal);">
+                                        ĐĂNG KÝ NGAY
+                                    </a>
+                                }
+                            </div>
+                            <div style="height: 5px; background-color: var(--brand-neon); width: 100%;"></div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="py-5" style="background-color: var(--brand-light);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--brand-teal);">HUẤN LUYỆN VIÊN UY TÍN</h2>
+            <p style="color: var(--brand-grey);">Đội ngũ chuyên gia giàu kinh nghiệm</p>
+            <hr class="mx-auto" style="width: 60px; height: 3px; background-color: var(--brand-neon); opacity: 1;">
+        </div>
+
+        <div class="row g-4">
+            @if (ViewBag.TopHLV != null)
+            {
+                foreach (var hlv in ViewBag.TopHLV)
+                {
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm text-center p-3 hover-up">
+                            <div class="mx-auto mb-3 rounded-circle overflow-hidden shadow-sm border border-3 border-white"
+                                 style="width: 120px; height: 120px; background-color: #ddd;">
+                                <img src="https://i.pravatar.cc/150?u=@hlv.HLV_ID" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                            </div>
+
+                            <h5 class="fw-bold mb-1" style="color: var(--brand-teal);">@hlv.HoTen</h5>
+                            <p class="text-muted small mb-2">@hlv.GioiTinh • @hlv.SoNamKinhNghiem năm kinh nghiệm</p>
+
+                            <div class="mb-3 text-warning small">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-auto">
+                                <a href="@(isLogged ? Url.Action("ChiTietHLV", "User", new { id = hlv.HLV_ID }) : loginUrl)"
+                                   class="btn btn-outline-dark btn-sm" style="border-color: var(--brand-teal); color: var(--brand-teal);">
+                                    Xem hồ sơ
+                                </a>
+
+                                @if (isLogged)
+                                {
+                                    <button class="btn btn-neon btn-sm fw-bold text-dark"
+                                            data-bs-toggle="modal" data-bs-target="#modalDatLich"
+                                            onclick="setDatLich('@hlv.HLV_ID', '@hlv.HoTen')">
+                                        Đặt lịch tập
+                                    </button>
+                                }
+                                else
+                                {
+                                    <a href="@loginUrl" class="btn btn-neon btn-sm fw-bold text-dark">Đặt lịch tập</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="py-5 text-white"
+     style="background: linear-gradient(rgba(0, 59, 70, 0.9), rgba(0, 59, 70, 0.95)), url('https://citigym.asia/uploads/banner-2.jpg') center/cover fixed;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--brand-neon);">CẢM NHẬN KHÁCH HÀNG</h2>
+            <p class="text-white-50">Những câu chuyện thành công thực tế</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            @if (ViewBag.DanhGia != null)
+            {
+                foreach (var rv in ViewBag.DanhGia)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 bg-transparent text-white text-center">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <i class="fas fa-quote-left fa-3x opacity-25" style="color: var(--brand-neon);"></i>
+                                </div>
+                                <p class="fst-italic lead mb-4">"@rv.NoiDung"</p>
+                                <div class="mt-auto">
+                                    <h6 class="fw-bold mb-0 text-uppercase" style="color: var(--brand-neon);">@rv.TenKhach</h6>
+                                    <small class="text-white-50">@string.Format("{0:dd/MM/yyyy}", rv.NgayTap)</small>
+                                    <div class="text-warning mt-1">
+                                        @for (int i = 0; i < rv.SoSao; i++)
+                                        {<i class="fas fa-star"></i>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDangKyGoi" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="@Url.Action("DangKyGoi", "User")" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-brand-teal text-white">
+                    <h5 class="modal-title fw-bold">XÁC NHẬN ĐĂNG KÝ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-shopping-cart fa-3x mb-3" style="color: var(--brand-teal);"></i>
+                    <p>Bạn đang chọn đăng ký gói tập:</p>
+                    <h4 class="fw-bold text-uppercase" id="modalTenGoi" style="color: var(--brand-teal);">...</h4>
+                    <h3 class="fw-bold text-danger mt-2" id="modalGiaGoi">0 đ</h3>
+
+                    <input type="hidden" name="idGoi" id="hiddenIdGoi" />
+                    <input type="hidden" name="giaTien" id="hiddenGiaTien" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-neon fw-bold text-dark">Xác nhận thanh toán</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatLich" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="@Url.Action("DatLichTap", "User")" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-brand-teal text-white">
+                    <h5 class="modal-title fw-bold">ĐẶT LỊCH VỚI HLV <span id="spanTenHLV" class="text-brand-neon"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" name="hlvID" id="hiddenHLVID" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Ngày tập mong muốn</label>
+                        <input type="date" name="ngayTap" class="form-control" required min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Nội dung</label>
+                        <select name="noiDung" class="form-select">
+                            <option value="Tập Gym">Tập Gym</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Yoga">Yoga</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-neon fw-bold text-dark">XÁC NHẬN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Script cho Modal Đăng Ký
+    var modalDangKy = document.getElementById('modalDangKyGoi');
+    if (modalDangKy) {
+        modalDangKy.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var ten = button.getAttribute('data-ten');
+            var gia = button.getAttribute('data-gia');
+            var giaHienThi = parseFloat(gia).toLocaleString('vi-VN') + ' VND';
+
+            modalDangKy.querySelector('#modalTenGoi').textContent = ten;
+            modalDangKy.querySelector('#modalGiaGoi').textContent = giaHienThi;
+            modalDangKy.querySelector('#hiddenIdGoi').value = id;
+            modalDangKy.querySelector('#hiddenGiaTien').value = gia;
+        });
+    }
+
+    // Script cho Modal Đặt Lịch
+    function setDatLich(id, ten) {
+        document.getElementById('hiddenHLVID').value = id;
+        document.getElementById('spanTenHLV').innerText = ten;
+    }
+</script>
+
+<style>
+    .hover-up:hover {
+        transform: translateY(-5px);
+        transition: 0.3s;
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.03);
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>

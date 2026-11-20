@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Đổi mật khẩu";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                <div class="card-header bg-brand-teal text-white text-center py-4 position-relative">
+                    <div class="mb-3">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-white bg-opacity-10"
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-shield-alt fa-3x" style="color: var(--brand-neon);"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-0 text-uppercase" style="letter-spacing: 1px;">ĐỔI MẬT KHẨU</h4>
+                    <p class="small opacity-75 mb-0">Tăng cường bảo mật cho tài khoản của bạn</p>
+                </div>
+
+                <div class="card-body p-5 bg-white">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="fas fa-exclamation-circle me-2 fa-lg"></i>
+                            <div>@ViewBag.Error</div>
+                        </div>
+                    }
+
+                    @if (ViewBag.Success != null)
+                    {
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <i class="fas fa-check-circle me-2 fa-lg"></i>
+                            <div>@ViewBag.Success</div>
+                        </div>
+                    }
+
+                    <form action="@Url.Action("DoiMatKhau", "User")" method="post">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted small">MẬT KHẨU HIỆN TẠI</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <input type="password" name="matKhauCu" class="form-control bg-light border-start-0"
+                                       placeholder="Nhập mật khẩu cũ..." required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted small">MẬT KHẨU MỚI</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" name="matKhauMoi" class="form-control bg-light border-start-0"
+                                       placeholder="Nhập mật khẩu mới..." required minlength="6">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted small">XÁC NHẬN MẬT KHẨU MỚI</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <input type="password" name="xacNhanMatKhau" class="form-control bg-light border-start-0"
+                                       placeholder="Nhập lại mật khẩu mới..." required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-neon btn-lg fw-bold shadow-sm text-dark">
+                                <i class="fas fa-save me-2"></i> CẬP NHẬT MẬT KHẨU
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="@Url.Action("Index", "User")" class="text-decoration-none text-muted small">
+                                <i class="fas fa-arrow-left me-1"></i> Quay về trang chủ
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

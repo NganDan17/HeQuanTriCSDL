@@ -1,0 +1,14 @@
+**/.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.log
+*.zip
+**/Database.Local.config
+**/Database.Local.config.*
+.env
+*.bak
+
+**/.verify.csproj
+

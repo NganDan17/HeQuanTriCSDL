@@ -1,0 +1,337 @@
+﻿@model Nhom05_Health_Fitness.Models.ActivityLogsViewModel
+
+@{
+    ViewBag.Title = "Activity Logs";
+    Layout = "~/Views/Shared/_LayoutHLV.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="~/Content/styleHLV.css" rel="stylesheet" />
+
+<style>
+    /* CSS Riêng cho trang này để giống hình */
+    .activity-container { padding: 0; color: #fff; font-family: 'Poppins', sans-serif; }
+
+    /* Header Badge */
+    .student-info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .student-info-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+
+    .student-info-header p {
+        margin: 5px 0 0;
+        color: var(--light-text);
+        font-weight: 300;
+    }
+
+    /* Style cho Dropdown chọn học viên */
+    .student-select-container {
+        min-width: 220px;
+    }
+
+    .custom-select-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: #5c2a3b; /* Màu nền đỏ rượu */
+        border: 1px solid #800000;
+        border-radius: 25px;
+        padding: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .custom-select-wrapper:hover {
+        background-color: #6e3247;
+        border-color: #e74c3c;
+        box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+    }
+
+    .user-icon {
+        position: absolute;
+        left: 15px;
+        color: #fff;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .student-dropdown {
+        appearance: none;
+        -webkit-appearance: none;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        width: 100%;
+        padding: 10px 40px 10px 45px; /* Padding trái né icon, phải né mũi tên */
+        cursor: pointer;
+        outline: none;
+        z-index: 1;
+    }
+
+    .student-dropdown option {
+        background-color: #33151f;
+        color: #fff;
+        padding: 10px;
+    }
+
+    .arrow-icon {
+        position: absolute;
+        right: 15px;
+        color: #ccc;
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    /* Chart Section */
+    .charts-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .chart-card {
+        background-color: #ffe4c4; /* Màu be sáng */
+        border-radius: 16px;
+        padding: 25px;
+        color: #3e2723; /* Chữ nâu đậm */
+        height: 380px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-card h4 {
+        margin-top: 0;
+        font-weight: 700;
+        font-size: 18px;
+        color: #5a3a2a; /* Màu nâu đỏ */
+        margin-bottom: 20px;
+    }
+
+    .chart-container {
+        flex-grow: 1;
+        position: relative;
+        width: 100%;
+        min-height: 0;
+    }
+
+    /* Table Section */
+    .log-section { margin-bottom: 50px; }
+    .log-section-title { margin-bottom: 20px; }
+    .log-badge {
+        background-color: #5c2a3b;
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        border: 1px solid #a34c5f;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .log-table-container {
+        background-color: #3d1420; /* Nền bảng màu đỏ tối */
+        border-radius: 16px;
+        padding: 25px;
+        overflow-x: auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .custom-table { width: 100%; border-collapse: collapse; color: #e0e0e0; min-width: 800px; }
+    .custom-table th {
+        text-align: left;
+        padding: 15px 20px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        border-bottom: 2px solid #5c2a3b;
+    }
+    .custom-table td {
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(92, 42, 59, 0.5);
+        font-size: 14px;
+        vertical-align: middle;
+    }
+    .custom-table tr:last-child td { border-bottom: none; }
+    .custom-table tbody tr:hover { background-color: rgba(255, 255, 255, 0.05); }
+
+</style>
+
+<div class="activity-container">
+
+    <div class="student-info-header">
+        <div>
+            <h2>Nhật Ký Hoạt Động</h2>
+            <p>Theo dõi lịch sử tập luyện và tiến trình cân nặng.</p>
+        </div>
+
+        <div class="student-select-container">
+            @using (Html.BeginForm("ActivityLogs", "HLV", FormMethod.Get, new { id = "studentForm" }))
+            {
+                <div class="custom-select-wrapper">
+                    <i class="fas fa-user user-icon"></i>
+
+                    @Html.DropDownList("studentId", Model.StudentsList,
+                        new
+                        {
+                            @class = "student-dropdown",
+                            onchange = "document.getElementById('studentForm').submit();"
+                        })
+                    <i class="fas fa-chevron-down arrow-icon"></i>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="charts-section">
+        <div class="chart-card">
+            <h4>Hoạt động tuần qua</h4>
+            <div class="chart-container">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h4>Tiến trình cân nặng (kg)</h4>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="log-section">
+        <div class="log-section-title">
+            <span class="log-badge">Lịch sử tập luyện</span>
+        </div>
+        <div class="log-table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Ngày tập</th>
+                        <th>Loại bài tập</th>
+                        <th>Thời lượng</th>
+                        <th>Chi tiết bài tập</th>
+                        <th>Calorie (Est)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.WorkoutLogs != null && Model.WorkoutLogs.Any())
+                    {
+                        foreach (var item in Model.WorkoutLogs)
+                        {
+                            <tr>
+                                <td>@item.Date</td>
+                                <td><span style="color: #fff; font-weight: 500;">@item.SessionType</span></td>
+                                <td>@item.Duration phút</td>
+                                <td style="max-width: 300px; line-height: 1.4;">@item.Exercises</td>
+                                <td>@item.Calories kcal</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding: 30px; color: #aaa;">
+                                Chưa có dữ liệu tập luyện nào.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        const actLabels = @Html.Raw(Json.Encode(Model.ChartLabels));
+        const actData = @Html.Raw(Json.Encode(Model.WeeklyActivityData));
+
+        var ctx1 = document.getElementById('weeklyChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: actLabels,
+                datasets: [{
+                    data: actData,
+                    backgroundColor: '#8d4e5a', // Màu nâu đỏ
+                    borderRadius: 4,
+                    barThickness: 25
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, color: '#5a3a2a' },
+                        grid: { color: '#dcbfa3', borderDash: [5, 5] }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#5a3a2a' } }
+                }
+            }
+        });
+
+        // --- Chart 2: Weight Progress (Dữ liệu từ TienTrinh) ---
+        const weightLabels = @Html.Raw(Json.Encode(Model.WeightLabels));
+        const weightData = @Html.Raw(Json.Encode(Model.WeightData));
+
+        var ctx2 = document.getElementById('weightChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: weightLabels,
+                datasets: [{
+                    data: weightData,
+                    borderColor: '#5a6d48', // Màu xanh rêu
+                    backgroundColor: 'rgba(90, 109, 72, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#5a6d48',
+                    pointRadius: 4,
+                    tension: 0.3, // Đường cong mềm
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: false, // Để thấy rõ biến động
+                        grid: { color: '#dcbfa3', borderDash: [5, 5] },
+                        ticks: {
+                            color: '#5a3a2a',
+                            callback: function(value) { return value + ' kg'; }
+                        }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#5a3a2a' } }
+                }
+            }
+        });
+    });
+    </script>
+}
