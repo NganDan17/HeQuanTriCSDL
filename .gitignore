@@ -11,4 +11,5 @@
 *.bak
 
 **/.verify.csproj
+.tools/
 
